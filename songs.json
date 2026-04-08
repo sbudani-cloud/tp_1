@@ -1,0 +1,26 @@
+[
+    {
+        "nombre": "I Know",
+        "artista": "Fiona Apple",
+        "album": "When the Pawn",
+        "direc": "canciones/I Know.mp3"
+    },
+    {
+        "nombre": "An Idle Brain Invites The Devil In",
+        "artista": "Salem The Musical",
+        "album": "Salem The Musical Soundtrack",
+        "direc": "canciones/An Idle Brain Invites The Devil In.mp3"
+    },
+    {
+        "nombre": "Eleanor Rigby",
+        "artista": "The Beatles",
+        "album": "Revolver",
+        "direc": "canciones/Eleanor Rigby.mp3"
+    },
+    {
+        "nombre": "New Perspective",
+        "artista": "Panic! At the Disco",
+        "album": "Jennifer's Body: Original Motion Picture Soundtrack",
+        "direc": "canciones/New Perspective.mp3"
+    }
+]

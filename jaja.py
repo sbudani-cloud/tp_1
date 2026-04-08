@@ -4,6 +4,7 @@ import pygame as pg
 import mutagen, json
 
 duration_song=350 # temporal
+canciones = []
 
 # ____________ . ✰ * Funciones * ✰ . ____________
 def play(filename):
@@ -15,6 +16,14 @@ def play(filename):
 
 def increase_progress_bar():
     pass
+
+def cargar_json():
+    global canciones
+    try:
+        with open("songs.json", "r") as archivo:
+            canciones = json.load(archivo)
+    except FileNotFoundError:
+        canciones = []
 
 # ____________ . ✰ * Root * ✰ . ____________
 root = tk.Tk()
