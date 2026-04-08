@@ -3,7 +3,7 @@ from tkinter import ttk
 import pygame as pg
 import mutagen, json
 
-duration_song=350 # temporal
+duration_song=178 # temporal
 canciones=[]
 
 # ____________ . ✰ * Funciones * ✰ . ____________
@@ -46,9 +46,20 @@ root.resizable(False, False)
 style = ttk.Style()
 style.theme_use('clam') #clam me gusta
 
+style.configure("TLabelframe", background="#f79eb9")
+style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Arial", 10))
+root.configure(bg="#ffc9d6")
+
+style.configure("TButton", background="#e97799", foreground="white") #dps borrar pq ni voy a usar botones de texto
+
+style.configure("Treeview.Heading", background="#e97799", foreground="white")
+style.configure("Treeview", background="#fadce2", fieldbackground="#fde9ed", foreground="#b4365b")
+
+style.configure("TLabel", foreground="white", background="#f79eb9", font=("Arial", 10))
+
 style.configure("Custom.Horizontal.TProgressbar",
-                troughcolor="white",
-                background="hotpink")
+                troughcolor="#fde9ed",
+                background="#e97799")
 
 # ____________ . ✰ * Frames * ✰ . ____________
 songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
@@ -70,13 +81,18 @@ play_b = ttk.Button(options_f, text="Play/Pausar").grid(row=0, column=2, pady=15
 siguiente_b = ttk.Button(options_f, text="Siguiente").grid(row=0, column=3, pady=15)
 loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
 
-progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
-progress_song.pack(padx=10, pady=10) #quiero q arriba d ekla profress bar aparexca la fotito del album
+progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
+progress_song.grid(row=0, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
+time_song = ttk.Label(songinfo_f, text="0:00").grid(row=0, column=0, pady=15, padx=5)
+time_left = ttk.Label(songinfo_f, text="-2:58").grid(row=0, column=2, pady=15, padx=5)
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
 tree_musica.heading("Nombre", text="Nombre")
+tree_musica.column("Nombre", width=120)
 tree_musica.heading("Album", text="Álbum")
+tree_musica.column("Album", width=120)
 tree_musica.heading("Artista", text="Artista")
+tree_musica.column("Artista", width=100)
 tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
 
 # ____________ . ✰ * Cargar * ✰ . ____________
