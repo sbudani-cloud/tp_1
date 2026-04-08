@@ -11,11 +11,14 @@ def play(filename):
     pg.mixer.init(frequency=16000)
     pg.mixer.music.load(filename)
     pg.mixer.music.play()
-    while pg.mixer.music.get_busy() == True:
-        continue
+
+    progress_song["value"] = 0
+    increase_progress_bar()
 
 def increase_progress_bar():
-    pass
+    if progress_song["value"] < duration_song:
+        progress_song["value"] += 1
+        root.after(1000, increase_progress_bar) 
 
 def cargar_json():
     global canciones
@@ -39,6 +42,14 @@ root.title("Música")
 root.geometry("800x500")
 root.resizable(False, False)
 
+# ____________ . ✰ * Estilos * ✰ . ____________
+style = ttk.Style()
+style.theme_use('clam') #clam me gusta
+
+style.configure("Custom.Horizontal.TProgressbar",
+                troughcolor="white",
+                background="hotpink")
+
 # ____________ . ✰ * Frames * ✰ . ____________
 songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
 songinfo_f.place(x=10, y=10, width=385, height=400)
@@ -59,7 +70,7 @@ play_b = ttk.Button(options_f, text="Play/Pausar").grid(row=0, column=2, pady=15
 siguiente_b = ttk.Button(options_f, text="Siguiente").grid(row=0, column=3, pady=15)
 loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
 
-progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=duration_song, mode='determinate')
+progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
 progress_song.pack(padx=10, pady=10) #quiero q arriba d ekla profress bar aparexca la fotito del album
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
@@ -73,6 +84,9 @@ cargar_json()
 show_songs_tree()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
+progress_song["value"] = 0
+increase_progress_bar()
+
 root.mainloop()
 
 """
