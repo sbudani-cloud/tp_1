@@ -49,3 +49,26 @@ lista_con_musica = ttk.Treeview(songselect_f)#poner q diga artista, album y nomb
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
 root.mainloop()
+
+"""
+codigo para poner gifs.... capaz lo use (depende pero capaz no)
+
+import tkinter as tk
+
+root = tk.Tk()
+label = tk.Label(root)
+label.pack()
+
+# Cargar frames (asumiendo gif con 160 frames)
+frames = [tk.PhotoImage(file='imagen.gif', format=f'gif -index {i}') for i in range(160)]
+
+def update(ind):
+    frame = frames[ind]
+    ind += 1
+    if ind == 160: ind = 0
+    label.configure(image=frame)
+    root.after(20, update, ind)
+
+root.after(0, update, 0)
+root.mainloop()
+"""
