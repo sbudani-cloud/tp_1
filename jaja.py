@@ -39,7 +39,7 @@ def show_songs_tree():
 # ____________ . ✰ * Root * ✰ . ____________
 root = tk.Tk()
 root.title("Música")
-root.geometry("800x500")
+root.geometry("800x510")
 root.resizable(False, False)
 
 # ____________ . ✰ * Estilos * ✰ . ____________
@@ -69,7 +69,7 @@ songselect_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
 songselect_f.place(x=405, y=10, width=385, height=400)
 
 options_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
-options_f.place(x=10, y=410, width=780, height=80)
+options_f.place(x=10, y=420, width=780, height=80)
 
 for i in range(5):
     options_f.columnconfigure(i, weight=1)
