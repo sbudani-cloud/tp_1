@@ -63,7 +63,14 @@ progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=duration
 progress_song.pack(padx=10, pady=10) #quiero q arriba d ekla profress bar aparexca la fotito del album
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
-tree_musica.pack(fill="both", expand=True, padx=10, pady=10)
+tree_musica.heading("Nombre", text="Nombre")
+tree_musica.heading("Album", text="Álbum")
+tree_musica.heading("Artista", text="Artista")
+tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
+
+# ____________ . ✰ * Cargar * ✰ . ____________
+cargar_json()
+show_songs_tree()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
 root.mainloop()
