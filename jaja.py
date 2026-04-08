@@ -37,7 +37,7 @@ for i in range(5):
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady=15)
-anterior_b = ttk.Button(options_f, text="Anterior").grid(row=0, column=1, pady=15)
+anterior_b = ttk.Button(options_f, text="Anterior").grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
 play_b = ttk.Button(options_f, text="Play/Pausar").grid(row=0, column=2, pady=15)
 siguiente_b = ttk.Button(options_f, text="Siguiente").grid(row=0, column=3, pady=15)
 loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
@@ -45,13 +45,15 @@ loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=duration_song, mode='determinate')
 progress_song.pack(padx=10, pady=10) #quiero q arriba d ekla profress bar aparexca la fotito del album
 
-lista_con_musica = ttk.Treeview(songselect_f)#poner q diga artista, album y nombnre de cancion
+tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
+tree_musica.pack(fill="both", expand=True, padx=10, pady=10)
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
 root.mainloop()
 
 """
-codigo para poner gifs.... capaz lo use (depende pero capaz no)
+codigo para poner gifs.... capaz lo use (depende pero capaz no) pq quiero q
+la foto del alnum sea un circulo cn un disco atras y q eso gire cuando esta en play
 
 import tkinter as tk
 
