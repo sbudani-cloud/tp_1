@@ -14,7 +14,7 @@ canciones=[]
 orden_actual = {}
 loop = False
 SONG_END = None
-
+tiempito_musica = 0
 # ____________ . ✰ * Funciones * ✰ . ____________
 def segundos_a_minutos(segundos):
     minutos = segundos//60
@@ -50,7 +50,7 @@ def play(filename): #arreglar para q ande con lo q se seleccione en el coso de p
         increase_progress_bar()
 
 def increase_progress_bar():
-    global bar_moment
+    global bar_moment, tiempito_musica
     if not paused and current_song:
         pos_ms = pg.mixer.music.get_pos()
         if pos_ms != -1:
@@ -61,6 +61,7 @@ def increase_progress_bar():
             time_left["text"] = f"-{segundos_a_minutos(int(restante))}"
 
             time_song["text"] = segundos_a_minutos(int(segundos))
+            tiempito_musica = int(segundos)
     bar_moment = root.after(200, increase_progress_bar)
 
 def cargar_json():
@@ -159,7 +160,7 @@ def siguiente_cancion():
                 break
 
 def anterior_cancion():
-    global current_song, filename
+    global current_song, filename, tiempito_musica
     selec = tree_musica.selection()
     items = tree_musica.get_children()
     if not items:
@@ -170,19 +171,22 @@ def anterior_cancion():
     else:
         anterior_index = 0
 
-    if anterior_index < len(items) and anterior_index >= 0:
-        item_anterior = items[anterior_index]
-        tree_musica.selection_set(item_anterior)
-        tree_musica.focus(item_anterior)
-        valores = tree_musica.item(item_anterior)["values"]
+    if tiempito_musica < 3:
+        if anterior_index < len(items) and anterior_index >= 0:
+            item_anterior = items[anterior_index]
+            tree_musica.selection_set(item_anterior)
+            tree_musica.focus(item_anterior)
+            valores = tree_musica.item(item_anterior)["values"]
 
-        for s in canciones:
-            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                play(s["direc"])
-                
-                filename = s["direc"]
-                current_song = s["direc"]
-                break
+            for s in canciones:
+                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                    play(s["direc"])
+                    
+                    filename = s["direc"]
+                    current_song = s["direc"]
+                    break
+    else:
+        pg.mixer.music.play()
 
 def cambiar_loop():
     global loop

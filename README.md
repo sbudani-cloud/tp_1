@@ -5,5 +5,22 @@ Descripción del proyecto etc etc etc
 ***
 ## Bitácora
 8/04
-Pensé como queria q se vea la interfaz y empece a organizar los frames y poner las cosas
-en su lugar, aunque todavia no funcionen. (mejorarn la redaccion este texto tamb)
+Pensé como queria que se vea la interfaz y empece a organizar los frames y poner las cosas
+en su lugar, aunque todavia no funcionen.
+Después decoré y logré hacer funcionar el botón de play.
+
+***
+9/05
+Cree una sección para las playlist e hice funcionar los botones de añadir y eliminar
+canciones a la playlist. Por ahora las canciones en la playlist no se pueden reproducir
+desde ahí.
+Hice funcionar el botón de anterior, siguiente y loop. También hice que cuanto una canción
+termine la siguiente en la lista funcione automáticamente. Por ahora solo funciona con la
+lista de canciones, y no con la lista de playlist.
+Por último, hice que el botón de ir a la canción anterior reinice la canción si ya esta 
+empezada (más de 3 segundos sonando), y si no, que si vaya a la anterior. (Funciona
+como el botón de stop)
+Siento que me va a costar lo de el tema de seleccionar de dos treeviews diferentes, pero
+voy a encargarme de eso la siguiente clase.
+Tengo planeado, además, poner las fotos del album de forma decorada, y que sean un gif que
+vaya girando.
