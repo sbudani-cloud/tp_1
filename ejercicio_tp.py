@@ -13,6 +13,7 @@ bar_moment = None
 canciones=[]
 orden_actual = {}
 loop = False #todavia no lo hice pero ya lo voy preparando
+SONG_END = None
 
 # ____________ . ✰ * Funciones * ✰ . ____________
 def segundos_a_minutos(segundos):
@@ -22,8 +23,10 @@ def segundos_a_minutos(segundos):
         segundos = f"0{segundos}"
     return f"{minutos}:{segundos}"
 def play(filename): #arreglar para q ande con lo q se seleccione en el coso de playlists
-    global duration_song, current_song, paused, bar_moment
+    global duration_song, current_song, paused, bar_moment, SONG_END
     pg.mixer.init(frequency=16000)
+    SONG_END = pg.USEREVENT + 1
+    pg.mixer.music.set_endevent(SONG_END)
     if current_song == filename:
         if paused:
             pg.mixer.music.unpause()
@@ -76,10 +79,13 @@ def show_songs_tree():
 def seleccionar_cancion(event): #que se deseleccione uno si se selecciono uno en el otro treeview
     global filename
     selec = tree_musica.selection()
-    if selec: 
-        id = int(selec[0].strip("I0"))
-        cancion = canciones[id-1]
-        filename = cancion["direc"]
+    if selec:
+        item = tree_musica.item(selec[0])
+        valores = item["values"]
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                filename = s["direc"]
+                break
 
 def anadir_a_playlist():
     for s in canciones:
@@ -107,7 +113,80 @@ def ordenar(columna):
     orden_actual[columna] = not reverso
     refrescar_treeview_musica()
 
+def checkiar_musica_termino():
+    for event in pg.event.get():
+        if event.type == SONG_END:
+            if loop == False:
+                siguiente_cancion()
+            else:
+                play(current_song)
+    root.after(200, checkiar_musica_termino)
+
+def siguiente_cancion():
+    global current_song, filename
+    selec = tree_musica.selection()
+    items = tree_musica.get_children()
+    if not items:
+        return
+    if selec:
+        index = items.index(selec[0])
+        siguiente_index = index + 1
+    else:
+        siguiente_index = 0
+
+    if siguiente_index < len(items):
+        next_item = items[siguiente_index]
+        tree_musica.selection_set(next_item)
+        tree_musica.focus(next_item)
+        valores = tree_musica.item(next_item)["values"]
+
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                play(s["direc"])
+                
+                filename = s["direc"]
+                current_song = s["direc"]
+                break
+    else:
+        tree_musica.selection_set(items[0])
+        tree_musica.focus(items[0])
+        valores = tree_musica.item(items[0])["values"]
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                play(s["direc"])
+                filename = s["direc"]
+                current_song = s["direc"]
+                break
+
+def anterior_cancion():
+    global current_song, filename
+    selec = tree_musica.selection()
+    items = tree_musica.get_children()
+    if not items:
+        return
+    if selec:
+        index = items.index(selec[0])
+        anterior_index = index - 1
+    else:
+        anterior_index = 0
+
+    if anterior_index < len(items) and anterior_index >= 0:
+        item_anterior = items[anterior_index]
+        tree_musica.selection_set(item_anterior)
+        tree_musica.focus(item_anterior)
+        valores = tree_musica.item(item_anterior)["values"]
+
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                play(s["direc"])
+                
+                filename = s["direc"]
+                current_song = s["direc"]
+                break
+
 # ____________ . ✰ * Root * ✰ . ____________
+pg.init()
+
 root = tk.Tk()
 root.title("Música")
 root.geometry("1100x510")
@@ -154,9 +233,9 @@ for i in range(2):
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady=15)
-anterior_b = ttk.Button(options_f, text="Anterior").grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
+anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
 play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play(filename)).grid(row=0, column=2, pady=15)
-siguiente_b = ttk.Button(options_f, text="Siguiente").grid(row=0, column=3, pady=15)
+siguiente_b = ttk.Button(options_f, text="Siguiente", command=siguiente_cancion).grid(row=0, column=3, pady=15)
 loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
 
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
@@ -202,6 +281,7 @@ cargar_json()
 show_songs_tree()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
+checkiar_musica_termino()
 root.mainloop()
 
 """
