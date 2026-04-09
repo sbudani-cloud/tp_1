@@ -11,6 +11,7 @@ current_song = None
 paused = False
 bar_moment = None
 canciones=[]
+orden_actual = {}
 loop = False #todavia no lo hice pero ya lo voy preparando
 
 # ____________ . ✰ * Funciones * ✰ . ____________
@@ -20,7 +21,7 @@ def segundos_a_minutos(segundos):
     if segundos >= 0 and segundos <= 9:
         segundos = f"0{segundos}"
     return f"{minutos}:{segundos}"
-def play(filename):
+def play(filename): #arreglar para q ande con lo q se seleccione en el coso de playlists
     global duration_song, current_song, paused, bar_moment
     pg.mixer.init(frequency=16000)
     if current_song == filename:
@@ -37,7 +38,6 @@ def play(filename):
         pg.mixer.music.load(filename)
         pg.mixer.music.play()
         current_song = filename
-        print(current_song)
 
         duration_song = MP3(current_song).info.length
         progress_song["maximum"] = duration_song
@@ -73,13 +73,39 @@ def show_songs_tree():
         tree_musica.insert("", tk.END, values=(
         s["Nombre"], s["Album"], s["Artista"], s["Duracion"], ))
 
-def seleccionar_cancion(event):
+def seleccionar_cancion(event): #que se deseleccione uno si se selecciono uno en el otro treeview
     global filename
     selec = tree_musica.selection()
     if selec: 
         id = int(selec[0].strip("I0"))
         cancion = canciones[id-1]
         filename = cancion["direc"]
+
+def anadir_a_playlist():
+    for s in canciones:
+        if filename == s["direc"]:
+            tree_playlist.insert("", tk.END, values=(
+                s["Nombre"], s["Album"], s["Artista"], s["Duracion"], ))
+
+def eliminar_de_playlist():
+    selec = tree_playlist.selection()
+    if selec:
+        tree_playlist.delete(selec[0])
+
+def refrescar_treeview_musica():
+    for item in tree_musica.get_children():
+        tree_musica.delete(item)
+    for s in canciones:
+        tree_musica.insert("", tk.END, values=(
+            s["Nombre"], s["Album"], s["Artista"], s["Duracion"]
+        ))
+
+def ordenar(columna):
+    global canciones
+    reverso = orden_actual.get(columna, False)
+    canciones.sort(key=lambda x: x[columna].lower(), reverse=reverso)
+    orden_actual[columna] = not reverso
+    refrescar_treeview_musica()
 
 # ____________ . ✰ * Root * ✰ . ____________
 root = tk.Tk()
@@ -123,6 +149,9 @@ playlists_f.place(x=800, y=10, width=290, height=350)
 pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
 pl_options_f.place(x=800, y=370, width=290, height=130)
 
+for i in range(2):
+    pl_options_f.columnconfigure(i, weight=1)
+
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady=15)
 anterior_b = ttk.Button(options_f, text="Anterior").grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
@@ -140,11 +169,11 @@ time_left = ttk.Label(songinfo_f, text="-0:00")
 time_left.grid(row=0, column=2, pady=15, padx=5)
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
-tree_musica.heading("Nombre", text="Nombre")
+tree_musica.heading("Nombre", text="Nombre", command=lambda: ordenar("Nombre"))
 tree_musica.column("Nombre", width=100)
-tree_musica.heading("Album", text="Álbum")
+tree_musica.heading("Album", text="Álbum", command=lambda: ordenar("Album"))
 tree_musica.column("Album", width=100)
-tree_musica.heading("Artista", text="Artista")
+tree_musica.heading("Artista", text="Artista", command=lambda: ordenar("Artista"))
 tree_musica.column("Artista", width=110)
 tree_musica.heading("Duracion", text="⏱️")
 tree_musica.column("Duracion", width=30)
@@ -164,9 +193,10 @@ tree_playlist.heading("Duracion", text="⏱️")
 tree_playlist.column("Duracion", width=30)
 tree_playlist.pack(fill="both", expand=True, padx=10, pady=10)
 
-agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist").grid(row=0, column=0, pady=10, padx=25)
-eliminar_pl = ttk.Button(pl_options_f, text="Eliminar Playlist").grid(row=0, column=1, pady=15)
+agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=anadir_a_playlist).grid(row=0, column=0, pady=10)
+eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
 
+tree_playlist.bind("<ButtonRelease-1>", seleccionar_cancion)
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
 show_songs_tree()
