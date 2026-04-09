@@ -26,3 +26,5 @@ Tengo planeado, además, poner las fotos del album de forma decorada, y que sean
 vaya girando y que si queres agregar más de una vez una canción a una playlist, te de un
 aviso antes de que el usuario decida si quiere hacerlo igual o no. También que si haces
 doble click en una canción se reproduzca como si fuera apretar el botón play.
+Otra cosa que quiero hacer es un .json donde se guarde la playlist que hayas creado, y
+una carpeta para poner las fotos de los albums.
