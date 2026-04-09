@@ -3,7 +3,8 @@ from tkinter import ttk
 import pygame as pg
 import mutagen, json
 
-duration_song=178 # temporal
+duration_song=(4*60)+55 # temporal
+filename= "canciones/I Know.mp3"
 canciones=[]
 
 # ____________ . ✰ * Funciones * ✰ . ____________
@@ -57,9 +58,7 @@ style.configure("Treeview", background="#fadce2", fieldbackground="#fde9ed", for
 
 style.configure("TLabel", foreground="white", background="#f79eb9", font=("Arial", 10))
 
-style.configure("Custom.Horizontal.TProgressbar",
-                troughcolor="#fde9ed",
-                background="#e97799")
+style.configure("Custom.Horizontal.TProgressbar", troughcolor="#fde9ed", background="#e97799")
 
 # ____________ . ✰ * Frames * ✰ . ____________
 songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
@@ -77,14 +76,14 @@ for i in range(5):
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady=15)
 anterior_b = ttk.Button(options_f, text="Anterior").grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
-play_b = ttk.Button(options_f, text="Play/Pausar").grid(row=0, column=2, pady=15)
+play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play(filename)).grid(row=0, column=2, pady=15)
 siguiente_b = ttk.Button(options_f, text="Siguiente").grid(row=0, column=3, pady=15)
 loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
 
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
 progress_song.grid(row=0, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
 time_song = ttk.Label(songinfo_f, text="0:00").grid(row=0, column=0, pady=15, padx=5)
-time_left = ttk.Label(songinfo_f, text="-2:58").grid(row=0, column=2, pady=15, padx=5)
+time_left = ttk.Label(songinfo_f, text="-4:55").grid(row=0, column=2, pady=15, padx=5)
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
 tree_musica.heading("Nombre", text="Nombre")
@@ -101,7 +100,7 @@ show_songs_tree()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
 progress_song["value"] = 0
-increase_progress_bar()
+#increase_progress_bar()
 
 root.mainloop()
 
