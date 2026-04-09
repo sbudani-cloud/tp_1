@@ -71,7 +71,7 @@ def cargar_json():
 def show_songs_tree():
     for i, s in enumerate(canciones):
         tree_musica.insert("", tk.END, values=(
-        s["Nombre"], s["Album"], s["Artista"], ))
+        s["Nombre"], s["Album"], s["Artista"], s["Duracion"], ))
 
 def seleccionar_cancion(event):
     global filename
@@ -133,13 +133,15 @@ time_song.grid(row=0, column=0, pady=15, padx=5)
 time_left = ttk.Label(songinfo_f, text="-0:00")
 time_left.grid(row=0, column=2, pady=15, padx=5)
 
-tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
+tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
 tree_musica.heading("Nombre", text="Nombre")
-tree_musica.column("Nombre", width=120)
+tree_musica.column("Nombre", width=100)
 tree_musica.heading("Album", text="Álbum")
-tree_musica.column("Album", width=120)
+tree_musica.column("Album", width=100)
 tree_musica.heading("Artista", text="Artista")
-tree_musica.column("Artista", width=100)
+tree_musica.column("Artista", width=110)
+tree_musica.heading("Duracion", text="⏱️")
+tree_musica.column("Duracion", width=30)
 tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
 
 tree_musica.bind("<ButtonRelease-1>", seleccionar_cancion)

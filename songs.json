@@ -3,30 +3,70 @@
         "Nombre": "I Know",
         "Artista": "Fiona Apple",
         "Album": "When the Pawn",
+        "Duracion": "4:55",
         "direc": "canciones/I Know.mp3"
     },
     {
         "Nombre": "An Idle Brain Invites The Devil In",
         "Artista": "Salem The Musical",
         "Album": "Salem The Musical Soundtrack",
+        "Duracion": "3:55",
         "direc": "canciones/An Idle Brain Invites The Devil In.mp3"
     },
     {
         "Nombre": "Eleanor Rigby",
         "Artista": "The Beatles",
         "Album": "Revolver",
+        "Duracion": "2:11",
         "direc": "canciones/Eleanor Rigby.mp3"
     },
     {
         "Nombre": "New Perspective",
         "Artista": "Panic! At the Disco",
         "Album": "Jennifer's Body: Original Motion Picture Soundtrack",
+        "Duracion": "3:54",
         "direc": "canciones/New Perspective.mp3"
     },
     {
         "Nombre": "Hamurahabibi",
         "Artista": "yo",
         "Album": "prueba",
+        "Duracion": "0:08",
+        "direc": "canciones/Hami.mp3"
+    },
+    {
+        "Nombre": "Esa Estella Era Mi Lujo",
+        "Artista": "Patricio Rey y sus Redonditos de Ricota",
+        "Album": "¡Bang!¡Bang!... Estas Liquidado",
+        "Duracion": "2:56",
+        "direc": "canciones/Esa Estella Era Mi Lujo.mp3"
+    },
+    {
+        "Nombre": "Elefantes en Europa",
+        "Artista": "Divididos",
+        "Album": "Narigon del Siglo, Yo Te Dejo Perfumado en la Esquina para Siempre",
+        "Duracion": "3:30",
+        "direc": "canciones/Elefantes en Europa.mp3"
+    },
+    {
+        "Nombre": "Hamurahabibi",
+        "Artista": "yo",
+        "Album": "prueba",
+        "Duracion": "0:08",
+        "direc": "canciones/Hami.mp3"
+    },
+    {
+        "Nombre": "Hamurahabibi",
+        "Artista": "yo",
+        "Album": "prueba",
+        "Duracion": "0:08",
+        "direc": "canciones/Hami.mp3"
+    },
+    {
+        "Nombre": "Hamurahabibi",
+        "Artista": "yo",
+        "Album": "prueba",
+        "Duracion": "0:08",
         "direc": "canciones/Hami.mp3"
     }
 ]
