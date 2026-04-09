@@ -5,7 +5,6 @@ from mutagen.mp3 import MP3
 import json
 
 # ____________ . ✰ * Variables * ✰ . ____________
-#duration_song=(4*60)+55 # temporal
 filename = None
 duration_song=0
 current_song = None
@@ -42,7 +41,6 @@ def play(filename):
 
         duration_song = MP3(current_song).info.length
         progress_song["maximum"] = duration_song
-        time_left["text"] = f"-{segundos_a_minutos(int(duration_song))}"
 
         paused = False
         progress_song["value"] = 0 
@@ -91,7 +89,7 @@ root.resizable(False, False)
 
 # ____________ . ✰ * Estilos * ✰ . ____________
 style = ttk.Style()
-style.theme_use('clam') #clam me gusta
+style.theme_use('clam')
 
 style.configure("TLabelframe", background="#f79eb9")
 style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Arial", 10))
