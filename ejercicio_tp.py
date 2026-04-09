@@ -84,7 +84,7 @@ def seleccionar_cancion(event):
 # ____________ . ✰ * Root * ✰ . ____________
 root = tk.Tk()
 root.title("Música")
-root.geometry("800x510")
+root.geometry("1100x510")
 root.resizable(False, False)
 
 # ____________ . ✰ * Estilos * ✰ . ____________
@@ -116,6 +116,9 @@ options_f.place(x=10, y=420, width=780, height=80)
 
 for i in range(5):
     options_f.columnconfigure(i, weight=1)
+
+playlists = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+playlists.place(x=800, y=10, width=290, height=490)
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady=15)
