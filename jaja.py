@@ -3,23 +3,42 @@ from tkinter import ttk
 import pygame as pg
 import mutagen, json
 
+# ____________ . ✰ * Variables * ✰ . ____________
 duration_song=(4*60)+55 # temporal
-filename= "canciones/I Know.mp3"
+#filename= "canciones/I Know.mp3"  temporal
+filename = None
+current_song = None
+paused = False
+bar_moment = None
 canciones=[]
 
 # ____________ . ✰ * Funciones * ✰ . ____________
 def play(filename):
+    global current_song, paused, bar_moment
     pg.mixer.init(frequency=16000)
-    pg.mixer.music.load(filename)
-    pg.mixer.music.play()
-
-    progress_song["value"] = 0
-    increase_progress_bar()
+    if current_song == filename:
+        if paused:
+            pg.mixer.music.unpause()
+            paused = False
+            increase_progress_bar()
+        else:
+            pg.mixer.music.pause()
+            paused = True
+            if bar_moment: 
+                root.after_cancel(bar_moment)
+    else:
+        pg.mixer.music.load(filename)
+        pg.mixer.music.play()
+        current_song = filename
+        paused = False
+        progress_song["value"] = 0 
+        increase_progress_bar()
 
 def increase_progress_bar():
+    global bar_moment
     if progress_song["value"] < duration_song:
         progress_song["value"] += 1
-        root.after(1000, increase_progress_bar) 
+        bar_moment = root.after(1000, increase_progress_bar)
 
 def cargar_json():
     global canciones
