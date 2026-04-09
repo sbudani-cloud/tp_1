@@ -23,4 +23,6 @@ como el botón de stop)
 Siento que me va a costar lo de el tema de seleccionar de dos treeviews diferentes, pero
 voy a encargarme de eso la siguiente clase.
 Tengo planeado, además, poner las fotos del album de forma decorada, y que sean un gif que
-vaya girando.
+vaya girando y que si queres agregar más de una vez una canción a una playlist, te de un
+aviso antes de que el usuario decida si quiere hacerlo igual o no. También que si haces
+doble click en una canción se reproduzca como si fuera apretar el botón play.

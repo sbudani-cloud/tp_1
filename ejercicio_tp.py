@@ -13,8 +13,12 @@ bar_moment = None
 canciones=[]
 orden_actual = {}
 loop = False
-SONG_END = None
 tiempito_musica = 0
+
+pg.mixer.init(frequency=16000)
+SONG_END = pg.USEREVENT + 1
+pg.mixer.music.set_endevent(SONG_END)
+
 # ____________ . ✰ * Funciones * ✰ . ____________
 def segundos_a_minutos(segundos):
     minutos = segundos//60
@@ -24,9 +28,6 @@ def segundos_a_minutos(segundos):
     return f"{minutos}:{segundos}"
 def play(filename): #arreglar para q ande con lo q se seleccione en el coso de playlists
     global duration_song, current_song, paused, bar_moment, SONG_END
-    pg.mixer.init(frequency=16000)
-    SONG_END = pg.USEREVENT + 1
-    pg.mixer.music.set_endevent(SONG_END)
     if current_song == filename:
         if paused:
             pg.mixer.music.unpause()
@@ -121,6 +122,7 @@ def checkiar_musica_termino():
                 siguiente_cancion()
             else:
                 pg.mixer.music.play()
+                progress_song["value"] = 0
     root.after(200, checkiar_musica_termino)
 
 def siguiente_cancion():
