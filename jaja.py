@@ -49,12 +49,17 @@ def cargar_json():
         canciones = []
 
 def show_songs_tree():
-    for s in canciones:
+    for i, s in enumerate(canciones):
         tree_musica.insert("", tk.END, values=(
-        s["Nombre"],
-        s["Album"],
-        s["Artista"],
-    ))
+        s["Nombre"], s["Album"], s["Artista"], ))
+
+def seleccionar_cancion(event):
+    global filename
+    selec = tree_musica.selection()
+    if selec: 
+        id = int(selec[0].strip("I0"))
+        cancion = canciones[id-1]
+        filename = cancion["direc"]
 
 # ____________ . ✰ * Root * ✰ . ____________
 root = tk.Tk()
@@ -113,13 +118,13 @@ tree_musica.heading("Artista", text="Artista")
 tree_musica.column("Artista", width=100)
 tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
 
+tree_musica.bind("<ButtonRelease-1>", seleccionar_cancion)
+
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
 show_songs_tree()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
-progress_song["value"] = 0
-#increase_progress_bar()
 
 root.mainloop()
 
