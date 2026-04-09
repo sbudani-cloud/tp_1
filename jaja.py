@@ -12,6 +12,7 @@ current_song = None
 paused = False
 bar_moment = None
 canciones=[]
+loop = False #todavia no lo hice pero ya lo voy preparando
 
 # ____________ . ✰ * Funciones * ✰ . ____________
 def segundos_a_minutos(segundos):
