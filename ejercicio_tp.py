@@ -117,8 +117,11 @@ options_f.place(x=10, y=420, width=780, height=80)
 for i in range(5):
     options_f.columnconfigure(i, weight=1)
 
-playlists = ttk.LabelFrame(root, text="+ . * ✰ * . +")
-playlists.place(x=800, y=10, width=290, height=490)
+playlists_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+playlists_f.place(x=800, y=10, width=290, height=350)
+
+pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+pl_options_f.place(x=800, y=370, width=290, height=130)
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady=15)
@@ -149,12 +152,26 @@ tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las c
 
 tree_musica.bind("<ButtonRelease-1>", seleccionar_cancion)
 
+
+tree_playlist = ttk.Treeview(playlists_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
+tree_playlist.heading("Nombre", text="Nombre")
+tree_playlist.column("Nombre", width=80)
+tree_playlist.heading("Album", text="Álbum")
+tree_playlist.column("Album", width=80)
+tree_playlist.heading("Artista", text="Artista")
+tree_playlist.column("Artista", width=70)
+tree_playlist.heading("Duracion", text="⏱️")
+tree_playlist.column("Duracion", width=30)
+tree_playlist.pack(fill="both", expand=True, padx=10, pady=10)
+
+agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist").grid(row=0, column=0, pady=10, padx=25)
+eliminar_pl = ttk.Button(pl_options_f, text="Eliminar Playlist").grid(row=0, column=1, pady=15)
+
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
 show_songs_tree()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
-
 root.mainloop()
 
 """
