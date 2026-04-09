@@ -1,20 +1,27 @@
 import tkinter as tk
 from tkinter import ttk
 import pygame as pg
-import mutagen, json
+from mutagen.mp3 import MP3
+import json
 
 # ____________ . ✰ * Variables * ✰ . ____________
-duration_song=(4*60)+55 # temporal
-#filename= "canciones/I Know.mp3"  temporal
+#duration_song=(4*60)+55 # temporal
 filename = None
+duration_song=0
 current_song = None
 paused = False
 bar_moment = None
 canciones=[]
 
 # ____________ . ✰ * Funciones * ✰ . ____________
+def segundos_a_minutos(segundos):
+    minutos = segundos//60
+    segundos = segundos % 60
+    if segundos >= 0 and segundos <= 9:
+        segundos = f"0{segundos}"
+    return f"{minutos}:{segundos}"
 def play(filename):
-    global current_song, paused, bar_moment
+    global duration_song, current_song, paused, bar_moment
     pg.mixer.init(frequency=16000)
     if current_song == filename:
         if paused:
@@ -30,15 +37,23 @@ def play(filename):
         pg.mixer.music.load(filename)
         pg.mixer.music.play()
         current_song = filename
+        print(current_song)
+
+        duration_song = MP3(current_song).info.length
+        progress_song["maximum"] = duration_song
+        time_song["text"] = segundos_a_minutos(int(duration_song))
         paused = False
         progress_song["value"] = 0 
         increase_progress_bar()
 
 def increase_progress_bar():
     global bar_moment
-    if progress_song["value"] < duration_song:
-        progress_song["value"] += 1
-        bar_moment = root.after(1000, increase_progress_bar)
+    if not paused and current_song:
+        pos_ms = pg.mixer.music.get_pos()
+        if pos_ms != -1:
+            segundos = pos_ms / 1000
+            progress_song["value"] = segundos
+    bar_moment = root.after(200, increase_progress_bar)
 
 def cargar_json():
     global canciones
@@ -106,8 +121,10 @@ loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
 
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
 progress_song.grid(row=0, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
-time_song = ttk.Label(songinfo_f, text="0:00").grid(row=0, column=0, pady=15, padx=5)
-time_left = ttk.Label(songinfo_f, text="-4:55").grid(row=0, column=2, pady=15, padx=5)
+time_song = ttk.Label(songinfo_f, text=segundos_a_minutos(int(duration_song)))
+time_song.grid(row=0, column=0, pady=15, padx=5)
+time_left = ttk.Label(songinfo_f, text="-4:55")
+time_left.grid(row=0, column=2, pady=15, padx=5)
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
 tree_musica.heading("Nombre", text="Nombre")

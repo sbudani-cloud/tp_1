@@ -22,5 +22,11 @@
         "Artista": "Panic! At the Disco",
         "Album": "Jennifer's Body: Original Motion Picture Soundtrack",
         "direc": "canciones/New Perspective.mp3"
+    },
+    {
+        "Nombre": "Hamurahabibi",
+        "Artista": "yo",
+        "Album": "prueba",
+        "direc": "canciones/Hami.mp3"
     }
 ]
