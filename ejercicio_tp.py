@@ -12,7 +12,7 @@ paused = False
 bar_moment = None
 canciones=[]
 orden_actual = {}
-loop = False #todavia no lo hice pero ya lo voy preparando
+loop = False
 SONG_END = None
 
 # ____________ . ✰ * Funciones * ✰ . ____________
@@ -119,7 +119,7 @@ def checkiar_musica_termino():
             if loop == False:
                 siguiente_cancion()
             else:
-                play(current_song)
+                pg.mixer.music.play()
     root.after(200, checkiar_musica_termino)
 
 def siguiente_cancion():
@@ -184,6 +184,13 @@ def anterior_cancion():
                 current_song = s["direc"]
                 break
 
+def cambiar_loop():
+    global loop
+    if loop == True:
+        loop = False
+    else:
+        loop = True
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
@@ -236,7 +243,7 @@ aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady
 anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
 play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play(filename)).grid(row=0, column=2, pady=15)
 siguiente_b = ttk.Button(options_f, text="Siguiente", command=siguiente_cancion).grid(row=0, column=3, pady=15)
-loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
+loop_b = ttk.Button(options_f, text="Repetir", command=cambiar_loop).grid(row=0, column=4, pady=15)
 
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
 progress_song.grid(row=0, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
