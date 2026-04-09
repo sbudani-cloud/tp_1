@@ -41,7 +41,8 @@ def play(filename):
 
         duration_song = MP3(current_song).info.length
         progress_song["maximum"] = duration_song
-        time_song["text"] = segundos_a_minutos(int(duration_song))
+        time_left["text"] = f"-{segundos_a_minutos(int(duration_song))}"
+
         paused = False
         progress_song["value"] = 0 
         increase_progress_bar()
@@ -53,6 +54,11 @@ def increase_progress_bar():
         if pos_ms != -1:
             segundos = pos_ms / 1000
             progress_song["value"] = segundos
+
+            restante = duration_song - segundos
+            time_left["text"] = f"-{segundos_a_minutos(int(restante))}"
+
+            time_song["text"] = segundos_a_minutos(int(segundos))
     bar_moment = root.after(200, increase_progress_bar)
 
 def cargar_json():
@@ -121,9 +127,11 @@ loop_b = ttk.Button(options_f, text="Repetir").grid(row=0, column=4, pady=15)
 
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
 progress_song.grid(row=0, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
+
 time_song = ttk.Label(songinfo_f, text=segundos_a_minutos(int(duration_song)))
 time_song.grid(row=0, column=0, pady=15, padx=5)
-time_left = ttk.Label(songinfo_f, text="-4:55")
+
+time_left = ttk.Label(songinfo_f, text="-0:00")
 time_left.grid(row=0, column=2, pady=15, padx=5)
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista"), show="headings")
