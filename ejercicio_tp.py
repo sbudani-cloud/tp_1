@@ -26,6 +26,7 @@ def segundos_a_minutos(segundos):
     if segundos >= 0 and segundos <= 9:
         segundos = f"0{segundos}"
     return f"{minutos}:{segundos}"
+
 def play(filename): #arreglar para q ande con lo q se seleccione en el coso de playlists
     global duration_song, current_song, paused, bar_moment, SONG_END
     if current_song == filename:
@@ -289,6 +290,7 @@ agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=an
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
 
 tree_playlist.bind("<ButtonRelease-1>", seleccionar_cancion)
+
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
 show_songs_tree()
