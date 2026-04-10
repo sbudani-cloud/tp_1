@@ -28,3 +28,9 @@ aviso antes de que el usuario decida si quiere hacerlo igual o no. También que 
 doble click en una canción se reproduzca como si fuera apretar el botón play.
 Otra cosa que quiero hacer es un .json donde se guarde la playlist que hayas creado, y
 una carpeta para poner las fotos de los albums.
+
+Agregué imagenes para los botones loop y aleatorio, los demas quiero que queden como
+botones normales porque me parecen lindos asi. El aleatorio solo funciona visualmente
+pero no hace nada.
+También quiero agregar en un futuro una configuración que te permita cambiar el estilo
+y crear estilos de mas colores.

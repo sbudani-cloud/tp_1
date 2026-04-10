@@ -13,6 +13,7 @@ bar_moment = None
 canciones=[]
 orden_actual = {}
 loop = False
+aleatorio = False
 tiempito_musica = 0
 
 pg.mixer.init(frequency=16000)
@@ -194,9 +195,20 @@ def anterior_cancion():
 def cambiar_loop():
     global loop
     if loop == True:
+        loop_b.state(["!selected"])
         loop = False
     else:
+        loop_b.state(["selected"])
         loop = True
+
+def randum_orden():
+    global aleatorio
+    if aleatorio == True:
+        aleatorio_b.state(["!selected"])
+        aleatorio = False
+    else:
+        aleatorio_b.state(["selected"])
+        aleatorio = True
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
@@ -205,6 +217,15 @@ root = tk.Tk()
 root.title("Música")
 root.geometry("1100x510")
 root.resizable(False, False)
+
+# ____________ . ✰ * Imagenes * ✰ . ____________
+img_boton_loop = tk.PhotoImage(file="images/button_loop.png")
+img_boton_loop_act = tk.PhotoImage(file="images/button_loop_act.png")
+
+img_boton_aleatorio = tk.PhotoImage(file="images/button_aleatorio.png")
+img_boton_aleatorio_act = tk.PhotoImage(file="images/button_aleatorio_act.png")
+
+test_img = tk.PhotoImage(file="album_prueba.png")
 
 # ____________ . ✰ * Estilos * ✰ . ____________
 style = ttk.Style()
@@ -222,6 +243,26 @@ style.configure("Treeview", background="#fadce2", fieldbackground="#fde9ed", for
 style.configure("TLabel", foreground="white", background="#f79eb9", font=("Arial", 10))
 
 style.configure("Custom.Horizontal.TProgressbar", troughcolor="#fde9ed", background="#e97799")
+
+style.element_create("Loop.button", "image", img_boton_loop, ("selected", img_boton_loop_act))
+style.layout("Loop.TButton", [
+    ("Loop.button", {"sticky": "nswe"})
+])
+style.configure("Loop.TButton",
+    background="#f79eb9",
+    padding=0,
+    borderwidth=0
+)
+
+style.element_create("Aleatorio.button", "image", img_boton_aleatorio, ("selected", img_boton_aleatorio_act))
+style.layout("Aleatorio.TButton", [
+    ("Aleatorio.button", {"sticky": "nswe"})
+])
+style.configure("Aleatorio.TButton",
+    background="#f79eb9",
+    padding=0,
+    borderwidth=0
+)
 
 # ____________ . ✰ * Frames * ✰ . ____________
 songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
@@ -246,20 +287,24 @@ for i in range(2):
     pl_options_f.columnconfigure(i, weight=1)
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
-aleatorio_b = ttk.Button(options_f, text="Aleatorio").grid(row=0, column=0, pady=15)
 anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
 play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play(filename)).grid(row=0, column=2, pady=15)
 siguiente_b = ttk.Button(options_f, text="Siguiente", command=siguiente_cancion).grid(row=0, column=3, pady=15)
-loop_b = ttk.Button(options_f, text="Repetir", command=cambiar_loop).grid(row=0, column=4, pady=15)
+
+#loop_b = ttk.Button(options_f, text="Repetir", command=cambiar_loop).grid(row=0, column=4, pady=15)
+aleatorio_b = ttk.Button(options_f, style="Aleatorio.TButton", command=randum_orden)
+aleatorio_b.grid(row=0, column=0)
+loop_b = ttk.Button(options_f, style="Loop.TButton", command=cambiar_loop)
+loop_b.grid(row=0, column=4)
 
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
-progress_song.grid(row=0, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
+progress_song.grid(row=1, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
 
 time_song = ttk.Label(songinfo_f, text=segundos_a_minutos(int(duration_song)))
-time_song.grid(row=0, column=0, pady=15, padx=5)
+time_song.grid(row=1, column=0, pady=15, padx=5)
 
 time_left = ttk.Label(songinfo_f, text="-0:00")
-time_left.grid(row=0, column=2, pady=15, padx=5)
+time_left.grid(row=1, column=2, pady=15, padx=5)
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
 tree_musica.heading("Nombre", text="Nombre", command=lambda: ordenar("Nombre"))
@@ -273,6 +318,7 @@ tree_musica.column("Duracion", width=30)
 tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
 
 tree_musica.bind("<ButtonRelease-1>", seleccionar_cancion)
+tree_musica.bind("<Double-Button-1>", lambda e: play(filename))
 
 
 tree_playlist = ttk.Treeview(playlists_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
@@ -290,6 +336,10 @@ agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=an
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
 
 tree_playlist.bind("<ButtonRelease-1>", seleccionar_cancion)
+
+# ____________ . ✰ * Albums * ✰ . ____________
+label = tk.Label(songinfo_f, image=test_img)
+label.grid(row=0, column=1, pady=15)
 
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
@@ -312,13 +362,14 @@ label.pack()
 # Cargar frames (asumiendo gif con 160 frames)
 frames = [tk.PhotoImage(file='imagen.gif', format=f'gif -index {i}') for i in range(160)]
 
-def update(ind):
+def update_disco_gif(ind):
     frame = frames[ind]
     ind += 1
-    if ind == 160: ind = 0
+    if ind == 160:
+        ind = 0
     label.configure(image=frame)
-    root.after(20, update, ind)
+    root.after(20, update_disco_gif, ind)
 
-root.after(0, update, 0)
+root.after(0, update_disco_gif, 0)
 root.mainloop()
 """

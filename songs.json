@@ -50,23 +50,23 @@
     },
     {
         "Nombre": "A Rodar Mi Vida",
-        "Artista": "DSDAAFS",
-        "Album": "FSF",
-        "Duracion": "0:08",
+        "Artista": "Fito Paez",
+        "Album": "El Amor Despues del Amor",
+        "Duracion": "4:41",
         "direc": "canciones/A rodar mi vida.mp3"
     },
     {
         "Nombre": "Un Angel para tu Soledad",
-        "Artista": "yo",
-        "Album": "dfdg",
-        "Duracion": "0:08",
+        "Artista": "Patricio Rey y sus Redonditos de Ricota",
+        "Album": "Lobo Suelto",
+        "Duracion": "3:51",
         "direc": "canciones/Un Angel para tu Soledad.mp3"
     },
     {
         "Nombre": "Ella Uso Mi Cabeza Como Un Revolver",
-        "Artista": "yo",
-        "Album": "prueba",
-        "Duracion": "0:08",
+        "Artista": "Soda Stereo",
+        "Album": "Sueño Stereo (Remastered)",
+        "Duracion": "4:33",
         "direc": "canciones/Ella Uso Mi Cabeza Como Un Revolver.mp3"
     }
 ]
