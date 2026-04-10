@@ -210,6 +210,14 @@ def randum_orden():
         aleatorio_b.state(["selected"])
         aleatorio = True
 
+def update_disco_gif(ind):
+    frame = frames[ind]
+    ind += 1
+    if ind == 36:
+        ind = 0
+    lol.configure(image=frame)
+    root.after(20, update_disco_gif, ind)
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
@@ -226,6 +234,8 @@ img_boton_aleatorio = tk.PhotoImage(file="images/button_aleatorio.png")
 img_boton_aleatorio_act = tk.PhotoImage(file="images/button_aleatorio_act.png")
 
 test_img = tk.PhotoImage(file="album_prueba.png")
+
+frames = [tk.PhotoImage(file='album.gif', format=f'gif -index {i}') for i in range(36)]
 
 # ____________ . ✰ * Estilos * ✰ . ____________
 style = ttk.Style()
@@ -338,38 +348,27 @@ eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=e
 tree_playlist.bind("<ButtonRelease-1>", seleccionar_cancion)
 
 # ____________ . ✰ * Albums * ✰ . ____________
-label = tk.Label(songinfo_f, image=test_img)
-label.grid(row=0, column=1, pady=15)
+"""album = tk.Label(songinfo_f, image=test_img, borderwidth=0)
+album.grid(row=0, column=1, pady=15)"""
+
+lol = tk.Label(songinfo_f)
+lol.grid(row=0, column=1, pady=15)
 
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
 show_songs_tree()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
-checkiar_musica_termino()
-root.mainloop()
-
-"""
-codigo para poner gifs.... capaz lo use (depende pero capaz no) pq quiero q
-la foto del alnum sea un circulo cn un disco atras y q eso gire cuando esta en play
-
-import tkinter as tk
-
-root = tk.Tk()
-label = tk.Label(root)
-label.pack()
-
-# Cargar frames (asumiendo gif con 160 frames)
-frames = [tk.PhotoImage(file='imagen.gif', format=f'gif -index {i}') for i in range(160)]
-
-def update_disco_gif(ind):
-    frame = frames[ind]
-    ind += 1
-    if ind == 160:
-        ind = 0
-    label.configure(image=frame)
-    root.after(20, update_disco_gif, ind)
-
 root.after(0, update_disco_gif, 0)
+checkiar_musica_termino()
+
 root.mainloop()
-"""
+
+"""lucia ahora si lo abris va a tirar error pq no tenes el gif pq acordate q dijiste q lo
+harias a la mañana mañanita porque ahora no encontras la tablet para hacer el gif
+pq no encontras ningun lugar decente para hacerlo en la compu y ademas es tarde
+ah y acordate de cambiar el numero 36 por el numero de frames que tenga tu nuevo gif
+se q mi compu es una re caca pero es re molesto que por tener abiertas 4 o 5 cositas
+q ni son tan pesadas me ande todo re lento, capaz mi programa es pesado igual pero vale
+la pena pq es muy lindo y lo hice yo y me gusta y lo voy a usar a partir de ahora pq
+no tiene anuncios, es gratis, es lindo y encima tiene las canciones que me gustan"""

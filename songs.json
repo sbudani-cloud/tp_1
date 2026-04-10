@@ -68,5 +68,12 @@
         "Album": "Sueño Stereo (Remastered)",
         "Duracion": "4:33",
         "direc": "canciones/Ella Uso Mi Cabeza Como Un Revolver.mp3"
+    },
+    {
+        "Nombre": "Baby Doll",
+        "Artista": "Dominic Fike",
+        "Album": "Don't Forget About Me, Demos",
+        "Duracion": "1:39",
+        "direc": "canciones/Baby Doll.mp3"
     }
 ]
