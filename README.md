@@ -31,6 +31,7 @@ una carpeta para poner las fotos de los albums.
 
 Agregué imagenes para los botones loop y aleatorio, los demas quiero que queden como
 botones normales porque me parecen lindos asi. El aleatorio solo funciona visualmente
-pero no hace nada.
+pero no hace nada. También ya hice lo del doble click en las canciones.
 También quiero agregar en un futuro una configuración que te permita cambiar el estilo
-y crear estilos de mas colores.
+y crear estilos de mas colores. Y un botón para "Abrir archivo..." y poder añadir canciones
+desde ahí.
