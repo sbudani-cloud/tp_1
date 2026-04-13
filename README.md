@@ -35,3 +35,13 @@ pero no hace nada. También ya hice lo del doble click en las canciones.
 También quiero agregar en un futuro una configuración que te permita cambiar el estilo
 y crear estilos de mas colores. Y un botón para "Abrir archivo..." y poder añadir canciones
 desde ahí.
+
+***
+13/04
+Cree las imagenes para los albums y los hice funcionar. Estoy considerando no hacer mi idea
+de los gifs porque mi compu es malisima y no aguanta mucho, entonces prefiero dejar el programa
+lo mas light posible, pero más adelante me la pienso, por ahora quiero hacer cambios más urgentes
+como hacer que la playlist funcione y el botón para que las canciones se reproduzcan aleatoriamente
+(para eso quiero que sea como spotify y que una cancion no se repita hasta que todas se hayan
+escuchado al menos una vez. probablemente haga una lista y vaya sacando las canciones q suenan, y
+que se vuelva a llenar cuando se quede vacia).
