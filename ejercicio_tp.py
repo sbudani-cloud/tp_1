@@ -45,6 +45,8 @@ def play(filename): #arreglar para q ande con lo q se seleccione en el coso de p
         pg.mixer.music.play()
         current_song = filename
 
+        show_img_album()
+
         duration_song = MP3(current_song).info.length
         progress_song["maximum"] = duration_song
 
@@ -200,7 +202,6 @@ def cambiar_loop():
     else:
         loop_b.state(["selected"])
         loop = True
-    show_img_album()
 
 def randum_orden():
     global aleatorio
@@ -212,14 +213,17 @@ def randum_orden():
         aleatorio = True
 
 def show_img_album():
-    global current_song
+    global current_song, img_album
     album=""
     for e in canciones:
         if e["direc"] == current_song:
             for letra in e["Album"]:
                 if letra in "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ":
                     album+= letra
-            print(album)
+            img_album = tk.PhotoImage(file=f"albums/{album}.png")
+            album_label.config(image=img_album)
+            album_label.image = img_album
+            break
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
@@ -236,16 +240,7 @@ img_boton_loop_act = tk.PhotoImage(file="images/button_loop_act.png")
 img_boton_aleatorio = tk.PhotoImage(file="images/button_aleatorio.png")
 img_boton_aleatorio_act = tk.PhotoImage(file="images/button_aleatorio_act.png")
 
-img_wtp = tk.PhotoImage(file="albums/WTP.png")
-img_eada = tk.PhotoImage(file="albums/EADA.png")
-img_bbel = tk.PhotoImage(file="albums/BBEL.png")
-img_dfamd = tk.PhotoImage(file="albums/DFAMD.png")
-img_ls = tk.PhotoImage(file="albums/LS.png")
-img_ndsytdpes = tk.PhotoImage(file="albums/NDSYTDPES.png")
-img_np = tk.PhotoImage(file="albums/NP.png")
-img_r = tk.PhotoImage(file="albums/R.png")
-img_stms = tk.PhotoImage(file="albums/STMS.png")
-img_ssr = tk.PhotoImage(file="albums/SSR.png")
+img_album = tk.PhotoImage(file="albums/none.png")
 
 # ____________ . ✰ * Estilos * ✰ . ____________
 style = ttk.Style()
@@ -358,8 +353,8 @@ eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=e
 tree_playlist.bind("<ButtonRelease-1>", seleccionar_cancion)
 
 # ____________ . ✰ * Albums * ✰ . ____________
-ab_wtp = tk.Label(songinfo_f, image=img_wtp, borderwidth=0)
-ab_wtp.grid(row=0, column=1, pady=15)
+album_label = tk.Label(songinfo_f, image=img_album, borderwidth=0)
+album_label.grid(row=0, column=1, pady=15)
 
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
