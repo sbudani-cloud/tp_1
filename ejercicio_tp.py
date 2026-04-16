@@ -16,6 +16,8 @@ loop = False
 aleatorio = False
 tiempito_musica = 0
 playlist_shuffle = []
+estilo_actual = 0
+estilos = ["rosa", "azul"]
 
 pg.mixer.init(frequency=16000)
 SONG_END = pg.USEREVENT + 1
@@ -257,6 +259,22 @@ def show_img_album():
             album_label.image = img_album
             break
 
+def cambiar_estilo():
+    global estilos, estilo_actual
+    estilo_actual += 1
+    actualizar_estilo()
+    
+
+def actualizar_estilo():
+    global estilo_actual, estilos
+    try:
+        print(estilos[estilo_actual])
+    except IndexError:
+        estilo_actual = 0
+    if estilos[estilo_actual] == "rosa":
+        tema_rosita()
+    else:
+        tema_azul()
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
@@ -276,40 +294,77 @@ img_album = tk.PhotoImage(file="albums/none.png")
 
 # ____________ . ✰ * Estilos * ✰ . ____________
 style = ttk.Style()
-style.theme_use('clam')
-
-style.configure("TLabelframe", background="#f79eb9")
-style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Arial", 10))
-root.configure(bg="#ffc9d6")
-
-style.configure("TButton", background="#e97799", foreground="white") #dps borrar pq ni voy a usar botones de texto
-
-style.configure("Treeview.Heading", background="#e97799", foreground="white")
-style.configure("Treeview", background="#fadce2", fieldbackground="#fde9ed", foreground="#b4365b")
-
-style.configure("TLabel", foreground="white", background="#f79eb9", font=("Arial", 10))
-
-style.configure("Custom.Horizontal.TProgressbar", troughcolor="#fde9ed", background="#e97799")
-
 style.element_create("Loop.button", "image", img_boton_loop, ("selected", img_boton_loop_act))
-style.layout("Loop.TButton", [
-    ("Loop.button", {"sticky": "nswe"})
-])
-style.configure("Loop.TButton",
-    background="#f79eb9",
-    padding=0,
-    borderwidth=0
-)
-
 style.element_create("Aleatorio.button", "image", img_boton_aleatorio, ("selected", img_boton_aleatorio_act))
-style.layout("Aleatorio.TButton", [
-    ("Aleatorio.button", {"sticky": "nswe"})
-])
-style.configure("Aleatorio.TButton",
-    background="#f79eb9",
-    padding=0,
-    borderwidth=0
-)
+
+def tema_rosita():
+    style.theme_use('clam')
+
+    style.configure("TLabelframe", background="#f79eb9")
+    style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Arial", 10))
+    root.configure(bg="#ffc9d6")
+
+    style.configure("TButton", background="#e97799", foreground="white")
+
+    style.configure("Treeview.Heading", background="#e97799", foreground="white")
+    style.configure("Treeview", background="#fadce2", fieldbackground="#fde9ed", foreground="#b4365b")
+
+    style.configure("TLabel", foreground="white", background="#f79eb9", font=("Arial", 10))
+
+    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#fde9ed", background="#e97799")
+
+    style.layout("Loop.TButton", [
+        ("Loop.button", {"sticky": "nswe"})
+    ])
+    style.configure("Loop.TButton",
+        background="#f79eb9",
+        padding=0,
+        borderwidth=0
+    )
+
+    style.layout("Aleatorio.TButton", [
+        ("Aleatorio.button", {"sticky": "nswe"})
+    ])
+    style.configure("Aleatorio.TButton",
+        background="#f79eb9",
+        padding=0,
+        borderwidth=0
+    )
+
+def tema_azul():
+    style = ttk.Style()
+    style.theme_use('clam')
+
+    style.configure("TLabelframe", background="#9ec5f7")
+    style.configure("TLabelframe.Label", foreground="white", background="#9ec5f7", font=("Arial", 10))
+    root.configure(bg="#c9e0ff")
+
+    style.configure("TButton", background="#77b6e9", foreground="white")
+
+    style.configure("Treeview.Heading", background="#77b6e9", foreground="white")
+    style.configure("Treeview", background="#dce4fa", fieldbackground="#e9effd", foreground="#3671b4")
+
+    style.configure("TLabel", foreground="white", background="#9ec5f7", font=("Arial", 10))
+
+    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#e9effd", background="#77b6e9")
+
+    style.layout("Loop.TButton", [
+        ("Loop.button", {"sticky": "nswe"})
+    ])
+    style.configure("Loop.TButton",
+        background="#9ec5f7",
+        padding=0,
+        borderwidth=0
+    )
+    
+    style.layout("Aleatorio.TButton", [
+        ("Aleatorio.button", {"sticky": "nswe"})
+    ])
+    style.configure("Aleatorio.TButton",
+        background="#9ec5f7",
+        padding=0,
+        borderwidth=0
+    )
 
 # ____________ . ✰ * Frames * ✰ . ____________
 songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
@@ -381,6 +436,8 @@ tree_playlist.pack(fill="both", expand=True, padx=10, pady=10)
 
 agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=anadir_a_playlist).grid(row=0, column=0, pady=10)
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
+cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).place(x=190/2, y=60) #agregar command
+
 
 tree_playlist.bind("<ButtonRelease-1>", seleccionar_cancion)
 
@@ -392,6 +449,8 @@ album_label.grid(row=0, column=1, pady=15)
 cargar_json()
 show_songs_tree()
 checkiar_musica_termino()
+actualizar_estilo()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
 root.mainloop()
+#cambiar los pngs y asi
