@@ -1,6 +1,5 @@
 # Música(dps pienso un nomnre)
-
-Descripción del proyecto etc etc etc
+Este proyecto es un reproductor de música, basandose en Spotify para algunas ideas de sus funcionamientos, y prestandole atención a la interfaz. 
 
 ***
 ## Bitácora
@@ -50,4 +49,5 @@ que se vuelva a llenar cuando se quede vacia).
 16/04
 Hoy planeo hacer las cosas que son mas escenciales que funcionen, que son la playlist y el botón de aleatorio. Quiero agregar una barra de busqueda, aunque hayan pocas canciones. También quiero un cosito para aumentar y bajar el volumen.
 El botón de aleatorio funciona. Use mucho ChatGPT porque pense que se entregaba hoy, pero entiendo lo que ChatGPT me dijo, asi que está bien.
-Agregué temas e hice que se pueda mover la progress bar a distintas partes de la canción. El único bug que encontré es que cuando activo el loop y muevo la barra y termina la canción hace una cosa rara. Después cuando este en casa y pueda escuchar lo arreglo.
+Agregué temas e hice que se pueda mover la progress bar a distintas partes de la canción. El único bug que encontré es que cuando activo el loop y muevo la barra y termina la canción hace una cosa rara. Logré arreglar ese bug.
+Cosas a hacer: que el botón de anterior funcione bien en el modo aleatorio, cambiar los pngs para que el estilo azul se vea bien, hacer nuevos botones de loop y aleatorio para versión azul.

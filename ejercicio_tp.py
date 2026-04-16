@@ -78,7 +78,7 @@ def increase_progress_bar():
 def cargar_json():
     global canciones
     try:
-        with open("songs.json", "r") as archivo:
+        with open("songs.json", "r", encoding = "utf-8") as archivo:
             canciones = json.load(archivo)
     except FileNotFoundError:
         canciones = []
@@ -126,13 +126,15 @@ def ordenar(columna):
     refrescar_treeview_musica()
 
 def checkiar_musica_termino():
+    global offset
     for event in pg.event.get():
         if event.type == SONG_END:
             if loop == False:
                 siguiente_cancion()
             else:
-                pg.mixer.music.play()
                 progress_song["value"] = 0
+                offset = 0
+                pg.mixer.music.play()
     root.after(200, checkiar_musica_termino)
 
 def siguiente_cancion():
