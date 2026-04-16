@@ -3,6 +3,7 @@ from tkinter import ttk
 import pygame as pg
 from mutagen.mp3 import MP3
 import json, random
+from PIL import Image, ImageTk
 
 # ____________ . ✰ * Variables * ✰ . ____________
 filename_catalogo = None
@@ -33,7 +34,7 @@ def segundos_a_minutos(segundos):
         segundos = f"0{segundos}"
     return f"{minutos}:{segundos}"
 
-def play(filename=None): #arreglar para q ande con lo q se seleccione en el coso de playlists
+def play(filename=None):
     global duration_song, current_song, paused, bar_moment, SONG_END, offset
     if filename is None:
         if tree_playlist.selection():
@@ -97,17 +98,6 @@ def show_songs_tree():
         tree_musica.insert("", tk.END, values=(
         s["Nombre"], s["Album"], s["Artista"], s["Duracion"], ))
 
-"""def seleccionar_cancion(event): #que se deseleccione uno si se selecciono uno en el otro treeview
-    global filename
-    selec = tree_musica.selection()
-    if selec:
-        item = tree_musica.item(selec[0])
-        valores = item["values"]
-        for s in canciones:
-            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                filename = s["direc"]
-                break"""
-
 def seleccionar_catalogo(event):
     global filename_catalogo
     tree_playlist.selection_set(())
@@ -135,11 +125,13 @@ def anadir_a_playlist(event=None):
         if filename_catalogo == s["direc"]:
             tree_playlist.insert("", tk.END, values=(
                 s["Nombre"], s["Album"], s["Artista"], s["Duracion"]))
+    guardar_playlist()
 
 def eliminar_de_playlist():
     selec = tree_playlist.selection()
     if selec:
         tree_playlist.delete(selec[0])
+    guardar_playlist()
 
 def refrescar_treeview_musica():
     for item in tree_musica.get_children():
@@ -157,16 +149,18 @@ def ordenar(columna):
     refrescar_treeview_musica()
 
 def checkiar_musica_termino():
-    global offset
-    for event in pg.event.get():
-        if event.type == SONG_END:
-            if loop == False:
-                siguiente_cancion()
-            else:
-                progress_song["value"] = 0
-                offset = 0
+    global tiempito_musica, duration_song, offset
+
+    if current_song and not paused:
+        if tiempito_musica >= int(duration_song) - 1:
+            if loop:
                 pg.mixer.music.play()
-    root.after(200, checkiar_musica_termino)
+                offset=0
+            else:
+                siguiente_cancion()
+                offset=0
+
+    root.after(500, checkiar_musica_termino)
 
 def siguiente_cancion():
     global current_song, filename_playlist, playlist_shuffle
@@ -228,7 +222,7 @@ def siguiente_cancion():
                 break
 
 def anterior_cancion():
-    global current_song, filename_playlist, tiempito_musica
+    global current_song, filename_playlist, tiempito_musica, offset
     
     selec = tree_playlist.selection()
     items = tree_playlist.get_children()
@@ -255,6 +249,7 @@ def anterior_cancion():
                     current_song = s["direc"]
                     break
     else:
+        offset = 0
         pg.mixer.music.play()
 
 def cambiar_loop():
@@ -298,7 +293,8 @@ def show_img_album():
             for letra in e["Album"]:
                 if letra in "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ":
                     album+= letra
-            img_album = tk.PhotoImage(file=f"albums/{album}.png")
+            img = Image.open(f"albums/{album}.png").convert("RGBA")
+            img_album = ImageTk.PhotoImage(img)
             album_label.config(image=img_album)
             album_label.image = img_album
             break
@@ -312,7 +308,7 @@ def cambiar_estilo():
 def actualizar_estilo():
     global estilo_actual, estilos
     try:
-        print(estilos[estilo_actual])
+        a = estilos[estilo_actual]
     except IndexError:
         estilo_actual = 0
     if estilos[estilo_actual] == "rosa":
@@ -330,11 +326,37 @@ def cambiar_tiempo_cancion(event):
     else:
         pg.mixer.music.play(start=nuevo_tiempo)
 
+def guardar_playlist():
+    playlist = []
+    for item in tree_playlist.get_children():
+        valores = tree_playlist.item(item)["values"]
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                playlist.append(s["direc"])
+                break
+    with open("playlist.json", "w", encoding="utf-8") as f:
+        json.dump(playlist, f, indent=4)
+
+def cargar_playlist():
+    try:
+        with open("playlist.json", "r", encoding="utf-8") as f:
+            direcciones = json.load(f)
+
+        for d in direcciones:
+            for s in canciones:
+                if s["direc"] == d:
+                    tree_playlist.insert("", tk.END, values=(
+                        s["Nombre"], s["Album"], s["Artista"], s["Duracion"]
+                    ))
+                    break
+    except FileNotFoundError:
+        pass
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
 root = tk.Tk()
-root.title("Música")
+root.title("+ . * Stray D✰gs Music * . +")
 root.geometry("1100x510")
 root.resizable(False, False)
 
@@ -357,6 +379,8 @@ def tema_rosita():
     style.configure("TLabelframe", background="#f79eb9")
     style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Arial", 10))
     root.configure(bg="#ffc9d6")
+
+    album_label.config(bg="#f79eb9")
 
     style.configure("TButton", background="#e97799", foreground="white")
 
@@ -390,14 +414,16 @@ def tema_azul():
     style.configure("TLabelframe.Label", foreground="white", background="#9ec5f7", font=("Arial", 10))
     root.configure(bg="#c9e0ff")
 
+    album_label.config(bg="#9ec5f7")
+
     style.configure("TButton", background="#77b6e9", foreground="white")
 
-    style.configure("Treeview.Heading", background="#77b6e9", foreground="white")
+    style.configure("Treeview.Heading", background="#63abe6", foreground="white")
     style.configure("Treeview", background="#dce4fa", fieldbackground="#e9effd", foreground="#3671b4")
 
     style.configure("TLabel", foreground="white", background="#9ec5f7", font=("Arial", 10))
 
-    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#e9effd", background="#77b6e9")
+    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#e9effd", background="#63abe6")
 
     style.layout("Loop.TButton", [
         ("Loop.button", {"sticky": "nswe"})
@@ -499,10 +525,10 @@ album_label.grid(row=0, column=1, pady=15)
 
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
+cargar_playlist()
 show_songs_tree()
 checkiar_musica_termino()
 actualizar_estilo()
 
 # ____________ . ✰ * MainLoop * ✰ . ____________
 root.mainloop()
-#cambiar los pngs y asi
