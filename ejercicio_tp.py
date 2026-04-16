@@ -19,6 +19,7 @@ playlist_shuffle = []
 estilo_actual = 0
 estilos = ["rosa", "azul"]
 
+
 pg.mixer.init(frequency=16000)
 SONG_END = pg.USEREVENT + 1
 pg.mixer.music.set_endevent(SONG_END)
@@ -275,6 +276,14 @@ def actualizar_estilo():
         tema_rosita()
     else:
         tema_azul()
+
+def cambiar_tiempo_cancion(event):
+    global duration_song
+    new_time = (event.x / progress_song.winfo_width()) * duration_song
+    progress_song['value'] = new_time
+    #pg.mixer.music.set_pos(new_time)
+    pg.mixer.music.play(start=new_time)
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
@@ -294,12 +303,11 @@ img_album = tk.PhotoImage(file="albums/none.png")
 
 # ____________ . ✰ * Estilos * ✰ . ____________
 style = ttk.Style()
+style.theme_use('clam')
 style.element_create("Loop.button", "image", img_boton_loop, ("selected", img_boton_loop_act))
 style.element_create("Aleatorio.button", "image", img_boton_aleatorio, ("selected", img_boton_aleatorio_act))
 
 def tema_rosita():
-    style.theme_use('clam')
-
     style.configure("TLabelframe", background="#f79eb9")
     style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Arial", 10))
     root.configure(bg="#ffc9d6")
@@ -332,9 +340,6 @@ def tema_rosita():
     )
 
 def tema_azul():
-    style = ttk.Style()
-    style.theme_use('clam')
-
     style.configure("TLabelframe", background="#9ec5f7")
     style.configure("TLabelframe.Label", foreground="white", background="#9ec5f7", font=("Arial", 10))
     root.configure(bg="#c9e0ff")
@@ -400,7 +405,9 @@ loop_b = ttk.Button(options_f, style="Loop.TButton", command=cambiar_loop)
 loop_b.grid(row=0, column=4)
 
 progress_song = ttk.Progressbar(songinfo_f, orient="horizontal", length=290, maximum=duration_song, mode='determinate', style="Custom.Horizontal.TProgressbar")
-progress_song.grid(row=1, column=1, pady=15, padx=5) #quiero q arriba d ekla profress bar aparexca la fotito del album
+progress_song.grid(row=1, column=1, pady=15, padx=5)
+
+progress_song.bind("<Button-1>", cambiar_tiempo_cancion)
 
 time_song = ttk.Label(songinfo_f, text=segundos_a_minutos(int(duration_song)))
 time_song.grid(row=1, column=0, pady=15, padx=5)
