@@ -5,7 +5,8 @@ from mutagen.mp3 import MP3
 import json, random
 
 # ____________ . ✰ * Variables * ✰ . ____________
-filename = None
+filename_catalogo = None
+filename_playlist = None
 duration_song=0
 current_song = None
 paused = False
@@ -88,7 +89,7 @@ def show_songs_tree():
         tree_musica.insert("", tk.END, values=(
         s["Nombre"], s["Album"], s["Artista"], s["Duracion"], ))
 
-def seleccionar_cancion(event): #que se deseleccione uno si se selecciono uno en el otro treeview
+"""def seleccionar_cancion(event): #que se deseleccione uno si se selecciono uno en el otro treeview
     global filename
     selec = tree_musica.selection()
     if selec:
@@ -97,13 +98,33 @@ def seleccionar_cancion(event): #que se deseleccione uno si se selecciono uno en
         for s in canciones:
             if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
                 filename = s["direc"]
+                break"""
+
+def seleccionar_catalogo(event):
+    global filename_catalogo
+    selec = tree_musica.selection()
+    if selec:
+        valores = tree_musica.item(selec[0])["values"]
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                filename_catalogo = s["direc"]
                 break
 
-def anadir_a_playlist():
+def seleccionar_playlist(event):
+    global filename_playlist
+    selec = tree_playlist.selection()
+    if selec:
+        valores = tree_playlist.item(selec[0])["values"]
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                filename_playlist = s["direc"]
+                break
+
+def anadir_a_playlist(event=None):
     for s in canciones:
-        if filename == s["direc"]:
+        if filename_catalogo == s["direc"]:
             tree_playlist.insert("", tk.END, values=(
-                s["Nombre"], s["Album"], s["Artista"], s["Duracion"], ))
+                s["Nombre"], s["Album"], s["Artista"], s["Duracion"]))
 
 def eliminar_de_playlist():
     selec = tree_playlist.selection()
@@ -138,7 +159,7 @@ def checkiar_musica_termino():
     root.after(200, checkiar_musica_termino)
 
 def siguiente_cancion():
-    global current_song, filename, playlist_shuffle
+    global current_song, filename_playlist, playlist_shuffle
     if aleatorio:
         global playlist_shuffle
 
@@ -148,22 +169,22 @@ def siguiente_cancion():
         cancion = playlist_shuffle.pop(0)
 
         play(cancion["direc"])
-        filename = cancion["direc"]
+        filename_playlist = cancion["direc"]
         current_song = cancion["direc"]
         
-        for item in tree_musica.get_children():
-            valores = tree_musica.item(item)["values"]
+        for item in tree_playlist.get_children():
+            valores = tree_playlist.item(item)["values"]
             for s in canciones:
                 if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
                     if s["direc"] == cancion["direc"]:
-                        tree_musica.selection_set(item)
-                        tree_musica.focus(item)
-                        tree_musica.see(item)
+                        tree_playlist.selection_set(item)
+                        tree_playlist.focus(item)
+                        tree_playlist.see(item)
                         break
         return
     
-    selec = tree_musica.selection()
-    items = tree_musica.get_children()
+    selec = tree_playlist.selection()
+    items = tree_playlist.get_children()
     if not items:
         return
     if selec:
@@ -174,33 +195,33 @@ def siguiente_cancion():
 
     if siguiente_index < len(items):
         next_item = items[siguiente_index]
-        tree_musica.selection_set(next_item)
-        tree_musica.focus(next_item)
-        valores = tree_musica.item(next_item)["values"]
+        tree_playlist.selection_set(next_item)
+        tree_playlist.focus(next_item)
+        valores = tree_playlist.item(next_item)["values"]
 
         for s in canciones:
             if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
                 play(s["direc"])
                 
-                filename = s["direc"]
+                filename_playlist = s["direc"]
                 current_song = s["direc"]
                 break
     else:
-        tree_musica.selection_set(items[0])
-        tree_musica.focus(items[0])
-        valores = tree_musica.item(items[0])["values"]
+        tree_playlist.selection_set(items[0])
+        tree_playlist.focus(items[0])
+        valores = tree_playlist.item(items[0])["values"]
         for s in canciones:
             if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
                 play(s["direc"])
-                filename = s["direc"]
+                filename_playlist = s["direc"]
                 current_song = s["direc"]
                 break
 
 def anterior_cancion():
-    global current_song, filename, tiempito_musica
+    global current_song, filename_playlist, tiempito_musica
     
-    selec = tree_musica.selection()
-    items = tree_musica.get_children()
+    selec = tree_playlist.selection()
+    items = tree_playlist.get_children()
     if not items:
         return
     if selec:
@@ -212,15 +233,15 @@ def anterior_cancion():
     if tiempito_musica < 3:
         if anterior_index < len(items) and anterior_index >= 0:
             item_anterior = items[anterior_index]
-            tree_musica.selection_set(item_anterior)
-            tree_musica.focus(item_anterior)
-            valores = tree_musica.item(item_anterior)["values"]
+            tree_playlist.selection_set(item_anterior)
+            tree_playlist.focus(item_anterior)
+            valores = tree_playlist.item(item_anterior)["values"]
 
             for s in canciones:
                 if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
                     play(s["direc"])
                     
-                    filename = s["direc"]
+                    filename_playlist = s["direc"]
                     current_song = s["direc"]
                     break
     else:
@@ -247,7 +268,16 @@ def randum_orden():
 
 def shuffle():
     global playlist_shuffle
-    playlist_shuffle = canciones.copy()
+    playlist_shuffle = []
+
+    for item in tree_playlist.get_children():
+        valores = tree_playlist.item(item)["values"]
+
+        for s in canciones:
+            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                playlist_shuffle.append(s)
+                break
+
     random.shuffle(playlist_shuffle)
 
 def show_img_album():
@@ -401,7 +431,7 @@ for i in range(2):
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
-play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play(filename)).grid(row=0, column=2, pady=15)
+play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play(filename_playlist)).grid(row=0, column=2, pady=15)
 siguiente_b = ttk.Button(options_f, text="Siguiente", command=siguiente_cancion).grid(row=0, column=3, pady=15)
 
 #loop_b = ttk.Button(options_f, text="Repetir", command=cambiar_loop).grid(row=0, column=4, pady=15)
@@ -432,9 +462,8 @@ tree_musica.heading("Duracion", text="⏱️")
 tree_musica.column("Duracion", width=30)
 tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
 
-tree_musica.bind("<ButtonRelease-1>", seleccionar_cancion)
-tree_musica.bind("<Double-Button-1>", lambda e: play(filename))
-
+tree_musica.bind("<ButtonRelease-1>", seleccionar_catalogo)
+tree_musica.bind("<Double-Button-1>", anadir_a_playlist)
 
 tree_playlist = ttk.Treeview(playlists_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
 tree_playlist.heading("Nombre", text="Nombre")
@@ -451,8 +480,8 @@ agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=an
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
 cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).place(x=190/2, y=60) #agregar command
 
-
-tree_playlist.bind("<ButtonRelease-1>", seleccionar_cancion)
+tree_playlist.bind("<ButtonRelease-1>", seleccionar_playlist)
+tree_playlist.bind("<Double-Button-1>", lambda e: play(filename_playlist))
 
 # ____________ . ✰ * Albums * ✰ . ____________
 album_label = tk.Label(songinfo_f, image=img_album, borderwidth=0)
