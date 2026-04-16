@@ -33,8 +33,16 @@ def segundos_a_minutos(segundos):
         segundos = f"0{segundos}"
     return f"{minutos}:{segundos}"
 
-def play(filename): #arreglar para q ande con lo q se seleccione en el coso de playlists
+def play(filename=None): #arreglar para q ande con lo q se seleccione en el coso de playlists
     global duration_song, current_song, paused, bar_moment, SONG_END, offset
+    if filename is None:
+        if tree_playlist.selection():
+            filename = filename_playlist
+        elif tree_musica.selection():
+            filename = filename_catalogo
+    if not filename:
+        return
+    
     if current_song == filename:
         if paused:
             pg.mixer.music.unpause()
@@ -102,6 +110,7 @@ def show_songs_tree():
 
 def seleccionar_catalogo(event):
     global filename_catalogo
+    tree_playlist.selection_set(())
     selec = tree_musica.selection()
     if selec:
         valores = tree_musica.item(selec[0])["values"]
@@ -112,6 +121,7 @@ def seleccionar_catalogo(event):
 
 def seleccionar_playlist(event):
     global filename_playlist
+    tree_musica.selection_set(())
     selec = tree_playlist.selection()
     if selec:
         valores = tree_playlist.item(selec[0])["values"]
@@ -431,7 +441,7 @@ for i in range(2):
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
-play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play(filename_playlist)).grid(row=0, column=2, pady=15)
+play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play()).grid(row=0, column=2, pady=15)
 siguiente_b = ttk.Button(options_f, text="Siguiente", command=siguiente_cancion).grid(row=0, column=3, pady=15)
 
 #loop_b = ttk.Button(options_f, text="Repetir", command=cambiar_loop).grid(row=0, column=4, pady=15)
@@ -463,7 +473,7 @@ tree_musica.column("Duracion", width=30)
 tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
 
 tree_musica.bind("<ButtonRelease-1>", seleccionar_catalogo)
-tree_musica.bind("<Double-Button-1>", anadir_a_playlist)
+tree_musica.bind("<Double-Button-1>", lambda e: play())
 
 tree_playlist = ttk.Treeview(playlists_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
 tree_playlist.heading("Nombre", text="Nombre")
@@ -481,7 +491,7 @@ eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=e
 cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).place(x=190/2, y=60) #agregar command
 
 tree_playlist.bind("<ButtonRelease-1>", seleccionar_playlist)
-tree_playlist.bind("<Double-Button-1>", lambda e: play(filename_playlist))
+tree_playlist.bind("<Double-Button-1>", lambda e: play())
 
 # ____________ . ✰ * Albums * ✰ . ____________
 album_label = tk.Label(songinfo_f, image=img_album, borderwidth=0)
