@@ -49,3 +49,4 @@ que se vuelva a llenar cuando se quede vacia).
 ***
 16/04
 Hoy planeo hacer las cosas que son mas escenciales que funcionen, que son la playlist y el botón de aleatorio.
+El botón de aleatorio funciona. Use mucho ChatGPT porque pense que se entregaba hoy, pero entiendo lo que ChatGPT me dijo, asi que está bien.

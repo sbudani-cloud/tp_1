@@ -239,17 +239,6 @@ def randum_orden():
         aleatorio = True
         shuffle()
 
-"""def shuffle(): #se que esta mal y no va a funcionar pero es para tener la idea
-    global current_song
-    canciones_shuffleaditas = []
-    for cancion in canciones:
-        canciones_shuffleaditas.append(cancion["direc"])
-    current_song = random.choice(canciones_shuffleaditas)
-    canciones_shuffleaditas.remove(current_song)
-    for event in pg.event.get():
-        if event.type == SONG_END:
-            play(current_song)"""
-
 def shuffle():
     global playlist_shuffle
     playlist_shuffle = canciones.copy()
