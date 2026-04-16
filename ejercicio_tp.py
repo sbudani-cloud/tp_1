@@ -18,7 +18,7 @@ tiempito_musica = 0
 playlist_shuffle = []
 estilo_actual = 0
 estilos = ["rosa", "azul"]
-
+offset= 0
 
 pg.mixer.init(frequency=16000)
 SONG_END = pg.USEREVENT + 1
@@ -33,7 +33,7 @@ def segundos_a_minutos(segundos):
     return f"{minutos}:{segundos}"
 
 def play(filename): #arreglar para q ande con lo q se seleccione en el coso de playlists
-    global duration_song, current_song, paused, bar_moment, SONG_END
+    global duration_song, current_song, paused, bar_moment, SONG_END, offset
     if current_song == filename:
         if paused:
             pg.mixer.music.unpause()
@@ -49,6 +49,8 @@ def play(filename): #arreglar para q ande con lo q se seleccione en el coso de p
         pg.mixer.music.play()
         current_song = filename
 
+        offset = 0
+        
         show_img_album()
 
         duration_song = MP3(current_song).info.length
@@ -63,7 +65,7 @@ def increase_progress_bar():
     if not paused and current_song:
         pos_ms = pg.mixer.music.get_pos()
         if pos_ms != -1:
-            segundos = pos_ms / 1000
+            segundos = (pos_ms / 1000) + offset
             progress_song["value"] = segundos
 
             restante = duration_song - segundos
@@ -135,7 +137,6 @@ def checkiar_musica_termino():
 
 def siguiente_cancion():
     global current_song, filename, playlist_shuffle
-    
     if aleatorio:
         global playlist_shuffle
 
@@ -278,11 +279,14 @@ def actualizar_estilo():
         tema_azul()
 
 def cambiar_tiempo_cancion(event):
-    global duration_song
-    new_time = (event.x / progress_song.winfo_width()) * duration_song
-    progress_song['value'] = new_time
-    #pg.mixer.music.set_pos(new_time)
-    pg.mixer.music.play(start=new_time)
+    global duration_song, offset, paused
+    nuevo_tiempo = duration_song * (event.x / progress_song.winfo_width())
+    offset = nuevo_tiempo 
+    if paused:
+        pg.mixer.music.play(start=nuevo_tiempo)
+        pg.mixer.music.pause()
+    else:
+        pg.mixer.music.play(start=nuevo_tiempo)
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
