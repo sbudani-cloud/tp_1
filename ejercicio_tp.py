@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import pygame as pg
 from mutagen.mp3 import MP3
-import json
+import json, random
 
 # ____________ . ✰ * Variables * ✰ . ____________
 filename = None
@@ -15,6 +15,7 @@ orden_actual = {}
 loop = False
 aleatorio = False
 tiempito_musica = 0
+playlist_shuffle = []
 
 pg.mixer.init(frequency=16000)
 SONG_END = pg.USEREVENT + 1
@@ -130,7 +131,31 @@ def checkiar_musica_termino():
     root.after(200, checkiar_musica_termino)
 
 def siguiente_cancion():
-    global current_song, filename
+    global current_song, filename, playlist_shuffle
+    
+    if aleatorio:
+        global playlist_shuffle
+
+        if not playlist_shuffle:
+            shuffle()
+
+        cancion = playlist_shuffle.pop(0)
+
+        play(cancion["direc"])
+        filename = cancion["direc"]
+        current_song = cancion["direc"]
+        
+        for item in tree_musica.get_children():
+            valores = tree_musica.item(item)["values"]
+            for s in canciones:
+                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                    if s["direc"] == cancion["direc"]:
+                        tree_musica.selection_set(item)
+                        tree_musica.focus(item)
+                        tree_musica.see(item)
+                        break
+        return
+    
     selec = tree_musica.selection()
     items = tree_musica.get_children()
     if not items:
@@ -167,6 +192,7 @@ def siguiente_cancion():
 
 def anterior_cancion():
     global current_song, filename, tiempito_musica
+    
     selec = tree_musica.selection()
     items = tree_musica.get_children()
     if not items:
@@ -211,6 +237,23 @@ def randum_orden():
     else:
         aleatorio_b.state(["selected"])
         aleatorio = True
+        shuffle()
+
+"""def shuffle(): #se que esta mal y no va a funcionar pero es para tener la idea
+    global current_song
+    canciones_shuffleaditas = []
+    for cancion in canciones:
+        canciones_shuffleaditas.append(cancion["direc"])
+    current_song = random.choice(canciones_shuffleaditas)
+    canciones_shuffleaditas.remove(current_song)
+    for event in pg.event.get():
+        if event.type == SONG_END:
+            play(current_song)"""
+
+def shuffle():
+    global playlist_shuffle
+    playlist_shuffle = canciones.copy()
+    random.shuffle(playlist_shuffle)
 
 def show_img_album():
     global current_song, img_album
@@ -359,9 +402,7 @@ album_label.grid(row=0, column=1, pady=15)
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
 show_songs_tree()
-
-# ____________ . ✰ * MainLoop * ✰ . ____________
-#root.after(0, update_disco_gif, 0)
 checkiar_musica_termino()
 
+# ____________ . ✰ * MainLoop * ✰ . ____________
 root.mainloop()

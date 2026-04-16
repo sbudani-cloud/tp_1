@@ -45,3 +45,7 @@ como hacer que la playlist funcione y el botón para que las canciones se reprod
 (para eso quiero que sea como spotify y que una cancion no se repita hasta que todas se hayan
 escuchado al menos una vez. probablemente haga una lista y vaya sacando las canciones q suenan, y
 que se vuelva a llenar cuando se quede vacia).
+
+***
+16/04
+Hoy planeo hacer las cosas que son mas escenciales que funcionen, que son la playlist y el botón de aleatorio.
