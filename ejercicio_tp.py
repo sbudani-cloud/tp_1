@@ -364,16 +364,26 @@ root.resizable(False, False)
 img_boton_loop = tk.PhotoImage(file="images/button_loop.png")
 img_boton_loop_act = tk.PhotoImage(file="images/button_loop_act.png")
 
+img_blue_boton_loop = tk.PhotoImage(file="images/blue_button_loop.png")
+img_blue_boton_loop_act = tk.PhotoImage(file="images/blue_button_loop_act.png")
+
 img_boton_aleatorio = tk.PhotoImage(file="images/button_aleatorio.png")
 img_boton_aleatorio_act = tk.PhotoImage(file="images/button_aleatorio_act.png")
+
+img_blue_boton_aleatorio = tk.PhotoImage(file="images/blue_button_aleatorio.png")
+img_blue_boton_aleatorio_act = tk.PhotoImage(file="images/blue_button_aleatorio_act.png")
 
 img_album = tk.PhotoImage(file="albums/none.png")
 
 # ____________ . ✰ * Estilos * ✰ . ____________
 style = ttk.Style()
 style.theme_use('clam')
-style.element_create("Loop.button", "image", img_boton_loop, ("selected", img_boton_loop_act))
-style.element_create("Aleatorio.button", "image", img_boton_aleatorio, ("selected", img_boton_aleatorio_act))
+
+style.element_create("PLoop.button", "image", img_boton_loop, ("selected", img_boton_loop_act))
+style.element_create("PAleatorio.button", "image", img_boton_aleatorio, ("selected", img_boton_aleatorio_act))
+
+style.element_create("BLoop.button", "image", img_blue_boton_loop, ("selected", img_blue_boton_loop_act))
+style.element_create("BAleatorio.button", "image", img_blue_boton_aleatorio, ("selected", img_blue_boton_aleatorio_act))
 
 def tema_rosita():
     style.configure("TLabelframe", background="#f79eb9")
@@ -392,7 +402,7 @@ def tema_rosita():
     style.configure("Custom.Horizontal.TProgressbar", troughcolor="#fde9ed", background="#e97799")
 
     style.layout("Loop.TButton", [
-        ("Loop.button", {"sticky": "nswe"})
+        ("PLoop.button", {"sticky": "nswe"})
     ])
     style.configure("Loop.TButton",
         background="#f79eb9",
@@ -401,7 +411,7 @@ def tema_rosita():
     )
 
     style.layout("Aleatorio.TButton", [
-        ("Aleatorio.button", {"sticky": "nswe"})
+        ("PAleatorio.button", {"sticky": "nswe"})
     ])
     style.configure("Aleatorio.TButton",
         background="#f79eb9",
@@ -426,7 +436,7 @@ def tema_azul():
     style.configure("Custom.Horizontal.TProgressbar", troughcolor="#e9effd", background="#63abe6")
 
     style.layout("Loop.TButton", [
-        ("Loop.button", {"sticky": "nswe"})
+        ("BLoop.button", {"sticky": "nswe"})
     ])
     style.configure("Loop.TButton",
         background="#9ec5f7",
@@ -435,7 +445,7 @@ def tema_azul():
     )
     
     style.layout("Aleatorio.TButton", [
-        ("Aleatorio.button", {"sticky": "nswe"})
+        ("BAleatorio.button", {"sticky": "nswe"})
     ])
     style.configure("Aleatorio.TButton",
         background="#9ec5f7",
