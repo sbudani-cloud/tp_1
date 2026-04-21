@@ -22,6 +22,7 @@ estilo_actual = 0
 estilos = ["rosa", "azul"]
 offset= 0
 last_song = None
+drag_item = None
 
 pg.mixer.init(frequency=16000)
 SONG_END = pg.USEREVENT + 1
@@ -368,6 +369,31 @@ def cargar_playlist():
     except FileNotFoundError:
         pass
 
+def on_button_press(event):
+    global drag_item
+    item = tree_playlist.identify_row(event.y)
+    if item:
+        drag_item = item
+
+def on_motion(event):
+    global drag_item
+    if not drag_item:
+        return
+
+    target = tree_playlist.identify_row(event.y)
+    if target and target != drag_item:
+        index = tree_playlist.index(target)
+        tree_playlist.move(drag_item, "", index)
+
+def on_button_release(event):
+    global drag_item
+    drag_item = None
+    guardar_playlist()
+
+def seleccionar_y_soltar(event):
+    seleccionar_playlist(event)
+    on_button_release(event)
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
@@ -542,8 +568,10 @@ agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=an
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
 cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).place(x=190/2, y=60) #agregar command
 
-tree_playlist.bind("<ButtonRelease-1>", seleccionar_playlist)
 tree_playlist.bind("<Double-Button-1>", lambda e: play())
+tree_playlist.bind("<ButtonPress-1>", on_button_press)
+tree_playlist.bind("<B1-Motion>", on_motion)
+tree_playlist.bind("<ButtonRelease-1>", seleccionar_y_soltar)
 
 # ____________ . ✰ * Albums * ✰ . ____________
 album_label = tk.Label(songinfo_f, image=img_album, borderwidth=0)
