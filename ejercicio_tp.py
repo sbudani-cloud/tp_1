@@ -372,7 +372,7 @@ def cargar_playlist():
 pg.init()
 
 root = tk.Tk()
-root.title("+ . * Stray D✰gs Music * . +")
+root.title("✩ + . * Luliify * . + ✩")
 root.geometry("1100x510")
 root.resizable(False, False)
 

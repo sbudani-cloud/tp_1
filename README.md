@@ -1,4 +1,4 @@
-# Música(dps pienso un nomnre)
+# Luliify
 Este proyecto es un reproductor de música, basandose en Spotify para algunas ideas de sus funcionamientos, y prestandole atención a la interfaz. 
 
 ***
@@ -34,13 +34,13 @@ Hice que funcione la playlist y que se guarde en un json.
 Lista de cosas para hacer:
 -Cambiar botones de loop y aleatorio cuando cambie el estilo.
 -Mejorar botón anterior en modo aleatorio.
--Botón “Abrir archivo…” para importar canciones.
 -Arrastrar para reordenar canciones en la playlist.
 -Barra de búsqueda.
+-Botón “Abrir archivo…” para importar canciones.
 -Aviso si querés agregar una canción duplicada a la playlist.
 -Volumen.
 -Crear más estilos.
 
 ***
 21/04
-Hice lo de que cambie el boton de loop y aleatorio con el estilo.
+Hice lo de que cambie el boton de loop y aleatorio con el estilo, y mejoré el botón de anterior en modo aleatorio.
