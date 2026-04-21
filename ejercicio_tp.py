@@ -1,8 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, filedialog
 import pygame as pg
 from mutagen.mp3 import MP3
-import json, random
+import json, random, os
 from PIL import Image, ImageTk
 
 # ____________ . ✰ * Variables * ✰ . ____________
@@ -307,10 +307,13 @@ def show_img_album():
     album=""
     for e in canciones:
         if e["direc"] == current_song:
-            for letra in e["Album"]:
-                if letra in "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ":
-                    album+= letra
-            img = Image.open(f"albums/{album}.png").convert("RGBA")
+            if e["Album"].lower() == "desconocido":
+                img = Image.open("albums/none.png").convert("RGBA")
+            else:
+                for letra in e["Album"]:
+                    if letra in "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ":
+                        album+= letra
+                img = Image.open(f"albums/{album}.png").convert("RGBA")
             img_album = ImageTk.PhotoImage(img)
             album_label.config(image=img_album)
             album_label.image = img_album
@@ -421,6 +424,40 @@ def quitar_placeholder(event):
     if search_entry.get() == "Buscar...":
         search_entry.delete(0, tk.END)
         search_entry.config(foreground="#893ae9")
+
+def abrir_archivos():
+    global canciones
+
+    archivos = filedialog.askopenfilenames(
+        title="Seleccionar canciones",
+        filetypes=[("Archivos MP3", "*.mp3")]
+    )
+
+    for ruta in archivos:
+        try:
+            audio = MP3(ruta)
+            duracion = int(audio.info.length)
+
+            nombre = os.path.basename(ruta).replace(".mp3", "")
+            
+            nueva = {
+                "Nombre": nombre,
+                "Album": "Desconocido",
+                "Artista": "Desconocido",
+                "Duracion": segundos_a_minutos(duracion),
+                "direc": ruta
+            }
+            if any(s["direc"] == ruta for s in canciones):
+                continue
+            canciones.append(nueva)
+
+        except Exception as e:
+            print("Error con:", ruta)
+
+    with open("songs.json", "w", encoding="utf-8") as f:
+        json.dump(canciones, f, indent=4)
+
+    refrescar_treeview_musica()
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
@@ -608,7 +645,9 @@ tree_playlist.pack(fill="both", expand=True, padx=10, pady=10)
 
 agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=anadir_a_playlist).grid(row=0, column=0, pady=10)
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
-cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).place(x=190/2, y=60) #agregar command
+cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).grid(row=1, column=0, pady=10)
+abrir_archivo_b = ttk.Button(pl_options_f, text="Abrir archivo...", command=abrir_archivos)
+abrir_archivo_b.grid(row=1, column=1, pady=10)
 
 tree_playlist.bind("<Double-Button-1>", lambda e: play())
 tree_playlist.bind("<ButtonPress-1>", on_button_press)

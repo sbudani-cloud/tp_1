@@ -37,7 +37,7 @@
     {
         "Nombre": "Esa Estella Era Mi Lujo",
         "Artista": "Patricio Rey y sus Redonditos de Ricota",
-        "Album": "¡Bang!¡Bang!... Estas Liquidado",
+        "Album": "\u00a1Bang!\u00a1Bang!... Estas Liquidado",
         "Duracion": "2:56",
         "direc": "canciones/Esa Estrella Era Mi Lujo.mp3"
     },
@@ -65,7 +65,7 @@
     {
         "Nombre": "Ella Uso Mi Cabeza Como Un Revolver",
         "Artista": "Soda Stereo",
-        "Album": "Sueño Stereo (Remastered)",
+        "Album": "Sue\u00f1o Stereo (Remastered)",
         "Duracion": "4:33",
         "direc": "canciones/Ella Uso Mi Cabeza Como Un Revolver.mp3"
     },
