@@ -21,6 +21,7 @@ playlist_shuffle = []
 estilo_actual = 0
 estilos = ["rosa", "azul"]
 offset= 0
+last_song = None
 
 pg.mixer.init(frequency=16000)
 SONG_END = pg.USEREVENT + 1
@@ -35,7 +36,7 @@ def segundos_a_minutos(segundos):
     return f"{minutos}:{segundos}"
 
 def play(filename=None):
-    global duration_song, current_song, paused, bar_moment, SONG_END, offset
+    global duration_song, current_song, paused, bar_moment, SONG_END, offset, last_song
     if filename is None:
         if tree_playlist.selection():
             filename = filename_playlist
@@ -55,6 +56,7 @@ def play(filename=None):
             if bar_moment: 
                 root.after_cancel(bar_moment)
     else:
+        last_song = current_song  
         pg.mixer.music.load(filename)
         pg.mixer.music.play()
         current_song = filename
@@ -223,6 +225,20 @@ def siguiente_cancion():
 
 def anterior_cancion():
     global current_song, filename_playlist, tiempito_musica, offset
+
+    if aleatorio and last_song:
+        anterior = last_song
+        play(anterior)
+        for item in tree_playlist.get_children():
+            valores = tree_playlist.item(item)["values"]
+            for s in canciones:
+                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                    if s["direc"] == anterior:
+                        tree_playlist.selection_set(item)
+                        tree_playlist.focus(item)
+                        tree_playlist.see(item)
+                        break
+        return
     
     selec = tree_playlist.selection()
     items = tree_playlist.get_children()

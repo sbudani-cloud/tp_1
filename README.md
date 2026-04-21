@@ -40,3 +40,7 @@ Lista de cosas para hacer:
 -Aviso si querés agregar una canción duplicada a la playlist.
 -Volumen.
 -Crear más estilos.
+
+***
+21/04
+Hice lo de que cambie el boton de loop y aleatorio con el estilo.
