@@ -394,6 +394,34 @@ def seleccionar_y_soltar(event):
     seleccionar_playlist(event)
     on_button_release(event)
 
+def filtrar_canciones(event=None):
+    texto = search_var.get().lower()
+
+    if texto == "buscar...":
+        texto = ""
+
+    for item in tree_musica.get_children():
+        tree_musica.delete(item)
+
+    for s in canciones:
+        if (texto in s["Nombre"].lower() or
+            texto in s["Album"].lower() or
+            texto in s["Artista"].lower()):
+            
+            tree_musica.insert("", tk.END, values=(
+                s["Nombre"], s["Album"], s["Artista"], s["Duracion"]
+            ))
+
+def poner_placeholder(event=None):
+    if search_entry.get() == "":
+        search_entry.insert(0, "Buscar...")
+        search_entry.config(foreground="#c89dfd")
+
+def quitar_placeholder(event):
+    if search_entry.get() == "Buscar...":
+        search_entry.delete(0, tk.END)
+        search_entry.config(foreground="#893ae9")
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
@@ -461,6 +489,9 @@ def tema_rosita():
         borderwidth=0
     )
 
+    style.configure("Search.TEntry", fieldbackground="#fde9ed", 
+                    bordercolor="#e97799", padding=5)
+
 def tema_azul():
     style.configure("TLabelframe", background="#9ec5f7")
     style.configure("TLabelframe.Label", foreground="white", background="#9ec5f7", font=("Arial", 10))
@@ -495,6 +526,9 @@ def tema_azul():
         borderwidth=0
     )
 
+    style.configure("Search.TEntry", fieldbackground="#e9effd", 
+                    bordercolor="#63abe6", padding=5)
+
 # ____________ . ✰ * Frames * ✰ . ____________
 songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
 songinfo_f.place(x=10, y=10, width=385, height=400)
@@ -522,7 +556,6 @@ anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).gr
 play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play()).grid(row=0, column=2, pady=15)
 siguiente_b = ttk.Button(options_f, text="Siguiente", command=siguiente_cancion).grid(row=0, column=3, pady=15)
 
-#loop_b = ttk.Button(options_f, text="Repetir", command=cambiar_loop).grid(row=0, column=4, pady=15)
 aleatorio_b = ttk.Button(options_f, style="Aleatorio.TButton", command=randum_orden)
 aleatorio_b.grid(row=0, column=0)
 loop_b = ttk.Button(options_f, style="Loop.TButton", command=cambiar_loop)
@@ -538,6 +571,15 @@ time_song.grid(row=1, column=0, pady=15, padx=5)
 
 time_left = ttk.Label(songinfo_f, text="-0:00")
 time_left.grid(row=1, column=2, pady=15, padx=5)
+
+search_var = tk.StringVar()
+search_entry = ttk.Entry(songselect_f, textvariable=search_var, style="Search.TEntry")
+search_entry.pack(fill="x", padx=10, pady=5)
+search_entry.bind("<KeyRelease>", filtrar_canciones)
+search_entry.insert(0, "Buscar...")
+search_entry.config(foreground="gray")
+search_entry.bind("<FocusIn>", quitar_placeholder)
+search_entry.bind("<FocusOut>", poner_placeholder)
 
 tree_musica = ttk.Treeview(songselect_f, columns=("Nombre", "Album", "Artista", "Duracion"), show="headings")
 tree_musica.heading("Nombre", text="Nombre", command=lambda: ordenar("Nombre"))
