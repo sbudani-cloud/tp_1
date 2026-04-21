@@ -46,7 +46,7 @@ Lista de cosas para hacer:
 Hice lo de que cambie el boton de loop y aleatorio con el estilo, y mejoré el botón de anterior en modo aleatorio. También hice que se puedan reordenar las canciones en la playlist.
 
 Falta:
--Botón “Abrir archivo…” para importar canciones. 
 -Aviso si querés agregar una canción duplicada a la playlist. 
 -Volumen. 
+-Foto para album desconocido
 -Crear más estilos.
