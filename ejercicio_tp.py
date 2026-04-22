@@ -336,7 +336,6 @@ def cambiar_estilo():
     estilo_actual += 1
     actualizar_estilo()
     
-
 def actualizar_estilo():
     global estilo_actual, estilos
     try:
