@@ -372,7 +372,7 @@ def guardar_playlist():
     with open("playlist.json", "w", encoding="utf-8") as f:
         json.dump(playlist, f, indent=4)
 
-def cargar_playlist():
+"""def cargar_playlist():
     try:
         with open("playlist.json", "r", encoding="utf-8") as f:
             direcciones = json.load(f)
@@ -386,7 +386,7 @@ def cargar_playlist():
                     break
     except FileNotFoundError:
         pass
-
+"""
 def on_button_press(event):
     global drag_item
     item = tree_playlist.identify_row(event.y)
@@ -479,12 +479,18 @@ def cambiar_volumen(valor):
     pg.mixer.music.set_volume(volumen)
     num_vol["text"] = valor
 
+def mostrar_lista_playlists():
+    pass
+
+def crear_playlist():
+    pass
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
 root = tk.Tk()
 root.title("✩ + . * Luliify * . + ✩")
-root.geometry("1200x510")
+root.geometry("1200x520")
 root.resizable(False, False)
 
 # ____________ . ✰ * Imagenes * ✰ . ____________
@@ -600,7 +606,7 @@ songselect_f = ttk.LabelFrame(root, text="+ . * ✰ Catálogo ✰ * . +")
 songselect_f.place(x=405, y=10, width=385, height=400)
 
 options_f = ttk.LabelFrame(root, text="+ . * ✰ Opciones ✰ * . +")
-options_f.place(x=10, y=420, width=780, height=80)
+options_f.place(x=10, y=420, width=780, height=90)
 
 for i in range(5):
     options_f.columnconfigure(i, weight=1)
@@ -609,13 +615,13 @@ playlists_f = ttk.LabelFrame(root, text="+ . * ✰ Playlist ✰ * . +")
 playlists_f.place(x=800, y=10, width=290, height=350)
 
 pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ Opciones ✰ * . +")
-pl_options_f.place(x=800, y=370, width=290, height=130)
+pl_options_f.place(x=800, y=370, width=290, height=140)
 
 for i in range(2):
     pl_options_f.columnconfigure(i, weight=1)
 
 vol_frame = ttk.LabelFrame(root, text="✰ Volumen ✰")
-vol_frame.place(x=1100, y=10, width=90, height=490)
+vol_frame.place(x=1100, y=10, width=90, height=500)
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
@@ -691,11 +697,15 @@ tree_playlist.heading("Duracion", text="⏱️")
 tree_playlist.column("Duracion", width=30)
 tree_playlist.pack(fill="both", expand=True, padx=10, pady=10)
 
-agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=añadir_a_playlist).grid(row=0, column=0, pady=10)
-eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
-cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).grid(row=1, column=0, pady=10)
+agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=añadir_a_playlist).grid(row=0, column=0, pady=3)
+eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=3)
+cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).grid(row=1, column=0, pady=3)
 abrir_archivo_b = ttk.Button(pl_options_f, text="Abrir archivo...", command=abrir_archivos)
-abrir_archivo_b.grid(row=1, column=1, pady=10)
+abrir_archivo_b.grid(row=1, column=1, pady=3)
+crear_playlist_b = ttk.Button(pl_options_f, text="Crear Playlist", command=crear_playlist)
+crear_playlist_b.grid(row=2, column=0, pady=3)
+volver_lista_b = ttk.Button(pl_options_f, text="Volver", command=mostrar_lista_playlists)
+volver_lista_b.grid(row=2, column=1, pady=3)
 
 tree_playlist.bind("<Double-Button-1>", lambda e: play())
 tree_playlist.bind("<ButtonPress-1>", on_button_press)
@@ -708,7 +718,7 @@ album_label.grid(row=0, column=1, pady=15)
 
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
-cargar_playlist()
+#cargar_playlist()
 show_songs_tree()
 checkiar_musica_termino()
 actualizar_estilo()
