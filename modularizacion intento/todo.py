@@ -697,9 +697,12 @@ tree_playlist.bind("<ButtonRelease-1>", seleccionar_y_soltar)
 album_label = tk.Label(songinfo_f, image=img_album, borderwidth=0)
 album_label.grid(row=0, column=1, pady=15)
 
-def main():
-    cargar_json()
-    cargar_playlist()
-    show_songs_tree()
-    checkiar_musica_termino()
-    actualizar_estilo()
+# ____________ . ✰ * Cargar * ✰ . ____________
+cargar_json()
+cargar_playlist()
+show_songs_tree()
+checkiar_musica_termino()
+actualizar_estilo()
+
+# ____________ . ✰ * MainLoop * ✰ . ____________
+root.mainloop()
