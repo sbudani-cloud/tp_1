@@ -497,7 +497,7 @@ def cambiar_volumen(valor):
 
 def mostrar_lista_playlists():
     global playlist_actual, en_lista_playlist
-    en_lista_playlist = False
+    en_lista_playlist = True
     playlist_actual=None
     tree_playlist.delete(*tree_playlist.get_children())
     for nombre_pl in playlists:
