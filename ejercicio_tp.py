@@ -25,6 +25,7 @@ last_song = None
 drag_item = None
 
 pg.mixer.init(frequency=16000)
+pg.mixer.music.set_volume(0.5)
 SONG_END = pg.USEREVENT + 1
 pg.mixer.music.set_endevent(SONG_END)
 
@@ -459,12 +460,16 @@ def abrir_archivos():
 
     refrescar_treeview_musica()
 
+def cambiar_volumen(valor):
+    volumen = float(valor) / 100
+    pg.mixer.music.set_volume(volumen)
+
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
 
 root = tk.Tk()
 root.title("✩ + . * Luliify * . + ✩")
-root.geometry("1100x510")
+root.geometry("1200x510")
 root.resizable(False, False)
 
 # ____________ . ✰ * Imagenes * ✰ . ____________
@@ -528,6 +533,9 @@ def tema_rosita():
 
     style.configure("Search.TEntry", fieldbackground="#fde9ed", 
                     bordercolor="#e97799", padding=5)
+    
+    volumen_slider.config(bg="#e97799", troughcolor="#fde9ed", fg="white",
+                        activebackground="#d55e82")
 
 def tema_azul():
     style.configure("TLabelframe", background="#9ec5f7")
@@ -565,6 +573,9 @@ def tema_azul():
 
     style.configure("Search.TEntry", fieldbackground="#e9effd", 
                     bordercolor="#63abe6", padding=5)
+    
+    volumen_slider.config(bg="#63abe6", troughcolor="#e9effd", fg="white", 
+                        activebackground="#5399d2")
 
 # ____________ . ✰ * Frames * ✰ . ____________
 songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
@@ -588,6 +599,9 @@ pl_options_f.place(x=800, y=370, width=290, height=130)
 for i in range(2):
     pl_options_f.columnconfigure(i, weight=1)
 
+vol_frame = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+vol_frame.place(x=1100, y=10, width=90, height=490)
+
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
 anterior_b = ttk.Button(options_f, text="Anterior", command=anterior_cancion).grid(row=0, column=1, pady=15) #si esta en medio d la cancnion tiene q reiniciarla en vez de ir a lka anetrior (comom spotify)
 play_b = ttk.Button(options_f, text="Play/Pausar", command=lambda: play()).grid(row=0, column=2, pady=15)
@@ -608,6 +622,21 @@ time_song.grid(row=1, column=0, pady=15, padx=5)
 
 time_left = ttk.Label(songinfo_f, text="-0:00")
 time_left.grid(row=1, column=2, pady=15, padx=5)
+
+volumen_slider = tk.Scale(
+    vol_frame,
+    from_=100,
+    to=0,
+    orient="vertical",
+    command=cambiar_volumen,
+    length=450,
+    width=30,
+    showvalue=0,
+    highlightthickness=0,
+    bd=0    
+)
+volumen_slider.set(50)
+volumen_slider.grid(row=0, column=0, padx=30, pady=10)
 
 search_var = tk.StringVar()
 search_entry = ttk.Entry(songselect_f, textvariable=search_var, style="Search.TEntry")
