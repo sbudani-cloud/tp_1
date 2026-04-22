@@ -44,9 +44,8 @@ Lista de cosas para hacer:
 ***
 21/04
 Hice lo de que cambie el boton de loop y aleatorio con el estilo, y mejoré el botón de anterior en modo aleatorio. También hice que se puedan reordenar las canciones en la playlist.
-Agregué un slider para poder cambiar el volumen.
+Agregué un slider para poder cambiar el volumen y una foto para cuando el album es desconocido.
 
 Falta:
--Aviso si querés agregar una canción duplicada a la playlist. 
--Foto para album desconocido
+-Capáz ver si puedo hacer mi propio toplevel en vez de un messagebox, para poder decorarlo y ponerle los colores.
 -Crear más estilos.

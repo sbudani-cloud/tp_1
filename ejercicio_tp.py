@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, filedialog
+from tkinter import ttk, filedialog, messagebox
 import pygame as pg
 from mutagen.mp3 import MP3
 import json, random, os
@@ -124,12 +124,23 @@ def seleccionar_playlist(event):
                 filename_playlist = s["direc"]
                 break
 
-def anadir_a_playlist(event=None):
+def añadir_a_playlist(event=None):
     for s in canciones:
         if filename_catalogo == s["direc"]:
+            for item in tree_playlist.get_children():
+                valores = tree_playlist.item(item)["values"]
+                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+                    respuesta = messagebox.askyesno(
+                        "Canción duplicada",
+                        "Esta canción ya está en la playlist.\n¿Querés agregarla igual?"
+                    )
+                    if not respuesta:
+                        return
+                    break
             tree_playlist.insert("", tk.END, values=(
                 s["Nombre"], s["Album"], s["Artista"], s["Duracion"]))
-    guardar_playlist()
+            guardar_playlist()
+            return
 
 def eliminar_de_playlist():
     selec = tree_playlist.selection()
@@ -309,7 +320,7 @@ def show_img_album():
     for e in canciones:
         if e["direc"] == current_song:
             if e["Album"].lower() == "desconocido":
-                img = Image.open("albums/none.png").convert("RGBA")
+                img = Image.open("albums/desconocido.png").convert("RGBA")
             else:
                 for letra in e["Album"]:
                     if letra in "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ":
@@ -672,7 +683,7 @@ tree_playlist.heading("Duracion", text="⏱️")
 tree_playlist.column("Duracion", width=30)
 tree_playlist.pack(fill="both", expand=True, padx=10, pady=10)
 
-agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=anadir_a_playlist).grid(row=0, column=0, pady=10)
+agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=añadir_a_playlist).grid(row=0, column=0, pady=10)
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=10)
 cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).grid(row=1, column=0, pady=10)
 abrir_archivo_b = ttk.Button(pl_options_f, text="Abrir archivo...", command=abrir_archivos)
