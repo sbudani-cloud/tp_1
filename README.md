@@ -49,3 +49,11 @@ Agregué un slider para poder cambiar el volumen y una foto para cuando el album
 Falta:
 -Capáz ver si puedo hacer mi propio toplevel en vez de un messagebox, para poder decorarlo y ponerle los colores.
 -Crear más estilos.
+
+***
+22/04
+Cosas para hacer (de nachito):
+-Crear más de una playlist.
+-Poner nombre de cosas en los frames.
+-Cambiar orden por duración.
+-Número de volumen.

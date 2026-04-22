@@ -588,28 +588,28 @@ def tema_azul():
                         activebackground="#5399d2")
 
 # ____________ . ✰ * Frames * ✰ . ____________
-songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ Canción ✰ * . +")
 songinfo_f.place(x=10, y=10, width=385, height=400)
 
-songselect_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+songselect_f = ttk.LabelFrame(root, text="+ . * ✰ Catálogo ✰ * . +")
 songselect_f.place(x=405, y=10, width=385, height=400)
 
-options_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+options_f = ttk.LabelFrame(root, text="+ . * ✰ Opciones ✰ * . +")
 options_f.place(x=10, y=420, width=780, height=80)
 
 for i in range(5):
     options_f.columnconfigure(i, weight=1)
 
-playlists_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+playlists_f = ttk.LabelFrame(root, text="+ . * ✰ Playlist ✰ * . +")
 playlists_f.place(x=800, y=10, width=290, height=350)
 
-pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ Opciones ✰ * . +")
 pl_options_f.place(x=800, y=370, width=290, height=130)
 
 for i in range(2):
     pl_options_f.columnconfigure(i, weight=1)
 
-vol_frame = ttk.LabelFrame(root, text="  + . * ✰ * . +  ")
+vol_frame = ttk.LabelFrame(root, text="✰ Volumen ✰")
 vol_frame.place(x=1100, y=10, width=90, height=490)
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
