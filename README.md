@@ -54,6 +54,6 @@ Falta:
 22/04
 Cosas para hacer (de nachito):
 -Crear más de una playlist.
--Poner nombre de cosas en los frames.
 -Cambiar orden por duración.
+-Poner nombre de cosas en los frames.
 -Número de volumen.

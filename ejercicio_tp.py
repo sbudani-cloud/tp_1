@@ -158,10 +158,13 @@ def refrescar_treeview_musica():
 
 def ordenar(columna):
     global canciones
-    reverso = orden_actual.get(columna, False)
-    canciones.sort(key=lambda x: x[columna].lower(), reverse=reverso)
-    orden_actual[columna] = not reverso
-    refrescar_treeview_musica()
+    if columna == "Duracion":
+        print(columna) #cuando pueda abrir el programa sigo pq necesito saber que devuelve esto
+    else:
+        reverso = orden_actual.get(columna, False)
+        canciones.sort(key=lambda x: x[columna].lower(), reverse=reverso)
+        orden_actual[columna] = not reverso
+        refrescar_treeview_musica()
 
 def checkiar_musica_termino():
     global tiempito_musica, duration_song, offset
@@ -473,6 +476,7 @@ def abrir_archivos():
 def cambiar_volumen(valor):
     volumen = float(valor) / 100
     pg.mixer.music.set_volume(volumen)
+    num_vol["text"] = valor #esto tambien voy a suponer que funciona porque sigo sin poder abrirlo
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
@@ -639,7 +643,7 @@ volumen_slider = tk.Scale(
     to=0,
     orient="vertical",
     command=cambiar_volumen,
-    length=450,
+    length=440, #450
     width=30,
     showvalue=0,
     highlightthickness=0,
@@ -647,6 +651,10 @@ volumen_slider = tk.Scale(
 )
 volumen_slider.set(50)
 volumen_slider.grid(row=0, column=0, padx=30, pady=10)
+
+num_vol = ttk.Label(vol_frame, text="50") #por ahora supongo que todo funciona porque no puedo abrirlo
+num_vol.grid(row=1, column=0, padx=30, pady=10)
+
 
 search_var = tk.StringVar()
 search_entry = ttk.Entry(songselect_f, textvariable=search_var, style="Search.TEntry")
@@ -664,7 +672,7 @@ tree_musica.heading("Album", text="Álbum", command=lambda: ordenar("Album"))
 tree_musica.column("Album", width=100)
 tree_musica.heading("Artista", text="Artista", command=lambda: ordenar("Artista"))
 tree_musica.column("Artista", width=110)
-tree_musica.heading("Duracion", text="⏱️")
+tree_musica.heading("Duracion", text="⏱️", command=lambda: ordenar("Duracion"))
 tree_musica.column("Duracion", width=30)
 tree_musica.pack(fill="both", expand=True, padx=10, pady=10)#voy a hacer q las cancniones sean hijitos de las playlist para q se puedan hacer o algo asi, dps veo
 
