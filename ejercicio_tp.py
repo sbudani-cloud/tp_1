@@ -554,7 +554,7 @@ def tema_rosita():
 
 def tema_azul():
     style.configure("TLabelframe", background="#9ec5f7")
-    style.configure("TLabelframe.Label", foreground="white", background="#9ec5f7", font=("Arial", 10))
+    style.configure("TLabelframe.Label", foreground="white", background="#9ec5f7", font=("Trebuchet MS", 10, "bold"))
     root.configure(bg="#c9e0ff")
 
     album_label.config(bg="#9ec5f7")
