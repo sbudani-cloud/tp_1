@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
-import os
-os.environ["SDL_AUDIODRIVER"] = "dummy"
+import os                               #borrar dps
+os.environ["SDL_AUDIODRIVER"] = "dummy" #borrar dps
 
 import pygame as pg
 from mutagen.mp3 import MP3
@@ -17,6 +17,8 @@ current_song = None
 paused = False
 bar_moment = None
 canciones=[]
+playlists = {}
+playlist_actual = None
 orden_actual = {}
 loop = False
 aleatorio = False
@@ -27,6 +29,7 @@ estilos = ["rosa", "azul"]
 offset= 0
 last_song = None
 drag_item = None
+en_lista_playlist = True
 
 pg.mixer.init(frequency=16000)
 pg.mixer.music.set_volume(0.5)
@@ -129,28 +132,49 @@ def seleccionar_playlist(event):
                 break
 
 def añadir_a_playlist(event=None):
+    global playlist_actual
+    if playlist_actual is None:
+        messagebox.showwarning("Error", "No estás en una playlist.")
+        return
+
+    if not filename_catalogo:
+        messagebox.showwarning("Error", "No hay canción seleccionada.")
+        return
+
     for s in canciones:
         if filename_catalogo == s["direc"]:
-            for item in tree_playlist.get_children():
-                valores = tree_playlist.item(item)["values"]
-                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                    respuesta = messagebox.askyesno(
-                        "Canción duplicada",
-                        "Esta canción ya está en la playlist.\n¿Querés agregarla igual?"
-                    )
-                    if not respuesta:
-                        return
-                    break
+
+            if s["direc"] in playlists[playlist_actual]:
+                messagebox.showinfo("Info", "La canción ya está en la playlist.") #cambiar esto para q sea como antes q te deja elegir
+                return
+
+            playlists[playlist_actual].append(s["direc"])
+
             tree_playlist.insert("", tk.END, values=(
-                s["Nombre"], s["Album"], s["Artista"], s["Duracion"]))
-            guardar_playlist()
+                s["Nombre"], s["Album"], s["Artista"], s["Duracion"]
+            ))
+
+            guardar_playlists()
             return
 
 def eliminar_de_playlist():
+    global playlist_actual
+
     selec = tree_playlist.selection()
-    if selec:
-        tree_playlist.delete(selec[0])
-    guardar_playlist()
+    if not selec or playlist_actual is None:
+        return
+
+    valores = tree_playlist.item(selec[0])["values"]
+
+    # buscar ruta real
+    for s in canciones:
+        if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
+            if s["direc"] in playlists[playlist_actual]:
+                playlists[playlist_actual].remove(s["direc"])
+            break
+
+    tree_playlist.delete(selec[0])
+    guardar_playlists()
 
 def refrescar_treeview_musica():
     for item in tree_musica.get_children():
@@ -361,32 +385,24 @@ def cambiar_tiempo_cancion(event):
     else:
         pg.mixer.music.play(start=nuevo_tiempo)
 
-def guardar_playlist():
-    playlist = []
-    for item in tree_playlist.get_children():
-        valores = tree_playlist.item(item)["values"]
-        for s in canciones:
-            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                playlist.append(s["direc"])
-                break
+def guardar_playlists():
     with open("playlist.json", "w", encoding="utf-8") as f:
-        json.dump(playlist, f, indent=4)
+        json.dump(playlists, f, indent=4)
 
-"""def cargar_playlist():
+def guardar_todas_playlists(playlist):
+    global playlistss
+    playlistss.append(playlist)
+    with open("playlist.json", "w", encoding="utf-8") as f:
+        json.dump(playlistss, f, indent=4)
+
+def cargar_playlist():
+    global playlists
     try:
         with open("playlist.json", "r", encoding="utf-8") as f:
-            direcciones = json.load(f)
-
-        for d in direcciones:
-            for s in canciones:
-                if s["direc"] == d:
-                    tree_playlist.insert("", tk.END, values=(
-                        s["Nombre"], s["Album"], s["Artista"], s["Duracion"]
-                    ))
-                    break
+            playlists = json.load(f)
     except FileNotFoundError:
-        pass
-"""
+        playlists = {}
+
 def on_button_press(event):
     global drag_item
     item = tree_playlist.identify_row(event.y)
@@ -406,7 +422,7 @@ def on_motion(event):
 def on_button_release(event):
     global drag_item
     drag_item = None
-    guardar_playlist()
+    guardar_playlists()
 
 def seleccionar_y_soltar(event):
     seleccionar_playlist(event)
@@ -480,10 +496,47 @@ def cambiar_volumen(valor):
     num_vol["text"] = valor
 
 def mostrar_lista_playlists():
-    pass
+    global playlist_actual, en_lista_playlist
+    en_lista_playlist = False
+    playlist_actual=None
+    tree_playlist.delete(*tree_playlist.get_children())
+    for nombre_pl in playlists:
+        tree_playlist.insert("", "end", values=(nombre_pl, "", "", ""))
 
 def crear_playlist():
-    pass
+    nombre = "Playlist " + str(len(playlists) + 1)
+    playlists[nombre] = []
+    global playlist_actual
+    playlist_actual = nombre
+    tree_playlist.delete(*tree_playlist.get_children())
+    for nombre_pl in playlists:
+        tree_playlist.insert("", "end", values=(nombre_pl, "", "", ""))
+    
+    guardar_playlists()
+
+def entrar_playlist(event):
+    global playlist_actual, en_lista_playlist
+    en_lista_playlist = False
+    selec = tree_playlist.selection()
+    if not selec:
+        return
+    nombre = tree_playlist.item(selec[0])["values"][0]
+    if nombre in playlists:
+        playlist_actual = nombre
+        tree_playlist.delete(*tree_playlist.get_children())
+        for ruta in playlists[nombre]:
+            for s in canciones:
+                if s["direc"] == ruta:
+                    tree_playlist.insert("", tk.END, values=(
+                        s["Nombre"], s["Album"], s["Artista"], s["Duracion"]
+                    ))
+                    break
+
+def manejar_doble_click(event):
+    if en_lista_playlist:
+        entrar_playlist(event)
+    else:
+        play()
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
@@ -611,7 +664,7 @@ options_f.place(x=10, y=420, width=780, height=90)
 for i in range(5):
     options_f.columnconfigure(i, weight=1)
 
-playlists_f = ttk.LabelFrame(root, text="+ . * ✰ Playlist ✰ * . +")
+playlists_f = ttk.LabelFrame(root, text="+ . * ✰ Playlists ✰ * . +")
 playlists_f.place(x=800, y=10, width=290, height=350)
 
 pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ Opciones ✰ * . +")
@@ -707,7 +760,8 @@ crear_playlist_b.grid(row=2, column=0, pady=3)
 volver_lista_b = ttk.Button(pl_options_f, text="Volver", command=mostrar_lista_playlists)
 volver_lista_b.grid(row=2, column=1, pady=3)
 
-tree_playlist.bind("<Double-Button-1>", lambda e: play())
+tree_playlist.bind("<Double-Button-1>", manejar_doble_click)
+
 tree_playlist.bind("<ButtonPress-1>", on_button_press)
 tree_playlist.bind("<B1-Motion>", on_motion)
 tree_playlist.bind("<ButtonRelease-1>", seleccionar_y_soltar)
@@ -718,7 +772,8 @@ album_label.grid(row=0, column=1, pady=15)
 
 # ____________ . ✰ * Cargar * ✰ . ____________
 cargar_json()
-#cargar_playlist()
+cargar_playlist()
+mostrar_lista_playlists()
 show_songs_tree()
 checkiar_musica_termino()
 actualizar_estilo()
