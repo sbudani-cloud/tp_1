@@ -162,13 +162,10 @@ def refrescar_treeview_musica():
 
 def ordenar(columna):
     global canciones
-    if columna == "Duracion":
-        print(columna) #cuando pueda abrir el programa sigo pq necesito saber que devuelve esto
-    else:
-        reverso = orden_actual.get(columna, False)
-        canciones.sort(key=lambda x: x[columna].lower(), reverse=reverso)
-        orden_actual[columna] = not reverso
-        refrescar_treeview_musica()
+    reverso = orden_actual.get(columna, False)
+    canciones.sort(key=lambda x: x[columna].lower(), reverse=reverso)
+    orden_actual[columna] = not reverso
+    refrescar_treeview_musica()
 
 def checkiar_musica_termino():
     global tiempito_musica, duration_song, offset
