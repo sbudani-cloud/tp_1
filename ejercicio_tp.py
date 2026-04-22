@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
+
+import os
+os.environ["SDL_AUDIODRIVER"] = "dummy"
+
 import pygame as pg
 from mutagen.mp3 import MP3
 import json, random, os
@@ -476,7 +480,7 @@ def abrir_archivos():
 def cambiar_volumen(valor):
     volumen = float(valor) / 100
     pg.mixer.music.set_volume(volumen)
-    num_vol["text"] = valor #esto tambien voy a suponer que funciona porque sigo sin poder abrirlo
+    num_vol["text"] = valor
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
@@ -513,7 +517,7 @@ style.element_create("BAleatorio.button", "image", img_blue_boton_aleatorio, ("s
 
 def tema_rosita():
     style.configure("TLabelframe", background="#f79eb9")
-    style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Arial", 10))
+    style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Trebuchet MS", 10, "bold"))
     root.configure(bg="#ffc9d6")
 
     album_label.config(bg="#f79eb9")
@@ -643,17 +647,17 @@ volumen_slider = tk.Scale(
     to=0,
     orient="vertical",
     command=cambiar_volumen,
-    length=440, #450
+    length=420, #450
     width=30,
     showvalue=0,
     highlightthickness=0,
     bd=0    
 )
 volumen_slider.set(50)
-volumen_slider.grid(row=0, column=0, padx=30, pady=10)
+volumen_slider.grid(row=0, column=0, padx=30, pady=5)
 
-num_vol = ttk.Label(vol_frame, text="50") #por ahora supongo que todo funciona porque no puedo abrirlo
-num_vol.grid(row=1, column=0, padx=30, pady=10)
+num_vol = ttk.Label(vol_frame, text="50")
+num_vol.grid(row=1, column=0, padx=30, pady=5)
 
 
 search_var = tk.StringVar()
