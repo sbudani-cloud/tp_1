@@ -48,6 +48,5 @@ Agregué un slider para poder cambiar el volumen.
 
 Falta:
 -Aviso si querés agregar una canción duplicada a la playlist. 
--Volumen. 
 -Foto para album desconocido
 -Crear más estilos.
