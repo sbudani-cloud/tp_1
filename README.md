@@ -52,8 +52,6 @@ Falta:
 
 ***
 22/04
+Hice que se pueda ordenar por duración, que los frames digan arriba que son, y que haya un número indicando en que volumen está.
 Cosas para hacer (de nachito):
 -Crear más de una playlist.
--Cambiar orden por duración.
--Poner nombre de cosas en los frames.
--Número de volumen.
