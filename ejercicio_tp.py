@@ -610,7 +610,7 @@ pl_options_f.place(x=800, y=370, width=290, height=130)
 for i in range(2):
     pl_options_f.columnconfigure(i, weight=1)
 
-vol_frame = ttk.LabelFrame(root, text="+ . * ✰ * . +")
+vol_frame = ttk.LabelFrame(root, text="  + . * ✰ * . +  ")
 vol_frame.place(x=1100, y=10, width=90, height=490)
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
