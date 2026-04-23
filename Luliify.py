@@ -335,11 +335,16 @@ def show_img_album():
         if e["direc"] == current_song:
             if e["Album"].lower() == "desconocido":
                 img = Image.open("albums/desconocido.png").convert("RGBA")
+            elif "<3" in e["Album"]:
+                img = Image.open("albums/mami.png").convert("RGBA")
             else:
                 for letra in e["Album"]:
                     if letra in "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ":
                         album+= letra
-                img = Image.open(f"albums/{album}.png").convert("RGBA")
+                try:
+                    img = Image.open(f"albums/{album}.png").convert("RGBA")
+                except:
+                    img = Image.open("albums/desconocido.png").convert("RGBA")
             img_album = ImageTk.PhotoImage(img)
             album_label.config(image=img_album)
             album_label.image = img_album
@@ -357,9 +362,9 @@ def actualizar_estilo():
     except IndexError:
         estilo_actual = 0
     if estilos[estilo_actual] == "rosa":
-        tema_rosita()
+        tema_azulcito()
     else:
-        tema_azul()
+        tema_violeta()
 
 def cambiar_tiempo_cancion(event):
     global duration_song, offset, paused
@@ -575,14 +580,14 @@ root.resizable(False, False)
 img_boton_loop = tk.PhotoImage(file="images/button_loop.png")
 img_boton_loop_act = tk.PhotoImage(file="images/button_loop_act.png")
 
-img_blue_boton_loop = tk.PhotoImage(file="images/blue_button_loop.png")
-img_blue_boton_loop_act = tk.PhotoImage(file="images/blue_button_loop_act.png")
+img_vio_boton_loop = tk.PhotoImage(file="images/vio_button_loop.png")
+img_vio_boton_loop_act = tk.PhotoImage(file="images/vio_button_loop_act.png")
 
 img_boton_aleatorio = tk.PhotoImage(file="images/button_aleatorio.png")
 img_boton_aleatorio_act = tk.PhotoImage(file="images/button_aleatorio_act.png")
 
-img_blue_boton_aleatorio = tk.PhotoImage(file="images/blue_button_aleatorio.png")
-img_blue_boton_aleatorio_act = tk.PhotoImage(file="images/blue_button_aleatorio_act.png")
+img_vio_boton_aleatorio = tk.PhotoImage(file="images/vio_button_aleatorio.png")
+img_vio_boton_aleatorio_act = tk.PhotoImage(file="images/vio_button_aleatorio_act.png")
 
 img_album = tk.PhotoImage(file="albums/none.png")
 
@@ -593,30 +598,30 @@ style.theme_use('clam')
 style.element_create("PLoop.button", "image", img_boton_loop, ("selected", img_boton_loop_act))
 style.element_create("PAleatorio.button", "image", img_boton_aleatorio, ("selected", img_boton_aleatorio_act))
 
-style.element_create("BLoop.button", "image", img_blue_boton_loop, ("selected", img_blue_boton_loop_act))
-style.element_create("BAleatorio.button", "image", img_blue_boton_aleatorio, ("selected", img_blue_boton_aleatorio_act))
+style.element_create("BLoop.button", "image", img_vio_boton_loop, ("selected", img_vio_boton_loop_act))
+style.element_create("BAleatorio.button", "image", img_vio_boton_aleatorio, ("selected", img_vio_boton_aleatorio_act))
 
-def tema_rosita():
-    style.configure("TLabelframe", background="#f79eb9")
-    style.configure("TLabelframe.Label", foreground="white", background="#f79eb9", font=("Trebuchet MS", 10, "bold"))
-    root.configure(bg="#ffc9d6")
+def tema_azulcito():
+    style.configure("TLabelframe", background="#5ab3dc")
+    style.configure("TLabelframe.Label", foreground="white", background="#5ab3dc", font=("Trebuchet MS", 10, "bold"))
+    root.configure(bg="#bdebf7")
 
-    album_label.config(bg="#f79eb9")
+    album_label.config(bg="#5ab3dc")
 
-    style.configure("TButton", background="#e97799", foreground="white")
+    style.configure("TButton", background="#0A89B4", foreground="white")
 
-    style.configure("Treeview.Heading", background="#e97799", foreground="white")
-    style.configure("Treeview", background="#fadce2", fieldbackground="#fde9ed", foreground="#b4365b")
+    style.configure("Treeview.Heading", background="#0A89B4", foreground="white")
+    style.configure("Treeview", background="#dcf0fa", fieldbackground="#e9f6fd", foreground="#364fb4")
 
-    style.configure("TLabel", foreground="white", background="#f79eb9", font=("Arial", 10))
+    style.configure("TLabel", foreground="white", background="#5ab3dc", font=("Arial", 10))
 
-    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#fde9ed", background="#e97799")
+    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#e9f6fd", background="#0A89B4")
 
     style.layout("Loop.TButton", [
         ("PLoop.button", {"sticky": "nswe"})
     ])
     style.configure("Loop.TButton",
-        background="#f79eb9",
+        background="#5ab3dc",
         padding=0,
         borderwidth=0
     )
@@ -625,38 +630,38 @@ def tema_rosita():
         ("PAleatorio.button", {"sticky": "nswe"})
     ])
     style.configure("Aleatorio.TButton",
-        background="#f79eb9",
+        background="#5ab3dc",
         padding=0,
         borderwidth=0
     )
 
-    style.configure("Search.TEntry", fieldbackground="#fde9ed", 
-                    bordercolor="#e97799", padding=5)
+    style.configure("Search.TEntry", fieldbackground="#e9f6fd", 
+                    bordercolor="#0A89B4", padding=5)
     
-    volumen_slider.config(bg="#e97799", troughcolor="#fde9ed", fg="white",
-                        activebackground="#d55e82")
+    volumen_slider.config(bg="#0A89B4", troughcolor="#e9f6fd", fg="white",
+                        activebackground="#5e9dd5")
 
-def tema_azul():
-    style.configure("TLabelframe", background="#9ec5f7")
-    style.configure("TLabelframe.Label", foreground="white", background="#9ec5f7", font=("Trebuchet MS", 10, "bold"))
-    root.configure(bg="#c9e0ff")
+def tema_violeta():
+    style.configure("TLabelframe", background="#d8acf5")
+    style.configure("TLabelframe.Label", foreground="white", background="#d8acf5", font=("Trebuchet MS", 10, "bold"))
+    root.configure(bg="#e3d3f8")
 
-    album_label.config(bg="#9ec5f7")
+    album_label.config(bg="#d8acf5")
 
-    style.configure("TButton", background="#77b6e9", foreground="white")
+    style.configure("TButton", background="#a88fe2", foreground="white")
 
-    style.configure("Treeview.Heading", background="#63abe6", foreground="white")
-    style.configure("Treeview", background="#dce4fa", fieldbackground="#e9effd", foreground="#3671b4")
+    style.configure("Treeview.Heading", background="#a88fe2", foreground="white")
+    style.configure("Treeview", background="#feebfe", fieldbackground="#feebfe", foreground="#8e4edc")
 
-    style.configure("TLabel", foreground="white", background="#9ec5f7", font=("Arial", 10))
+    style.configure("TLabel", foreground="white", background="#d8acf5", font=("Arial", 10))
 
-    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#e9effd", background="#63abe6")
+    style.configure("Custom.Horizontal.TProgressbar", troughcolor="#feebfe", background="#a88fe2")
 
     style.layout("Loop.TButton", [
         ("BLoop.button", {"sticky": "nswe"})
     ])
     style.configure("Loop.TButton",
-        background="#9ec5f7",
+        background="#d8acf5",
         padding=0,
         borderwidth=0
     )
@@ -665,40 +670,40 @@ def tema_azul():
         ("BAleatorio.button", {"sticky": "nswe"})
     ])
     style.configure("Aleatorio.TButton",
-        background="#9ec5f7",
+        background="#d8acf5",
         padding=0,
         borderwidth=0
     )
 
-    style.configure("Search.TEntry", fieldbackground="#e9effd", 
-                    bordercolor="#63abe6", padding=5)
+    style.configure("Search.TEntry", fieldbackground="#feebfe", 
+                    bordercolor="#a88fe2", padding=5)
     
-    volumen_slider.config(bg="#63abe6", troughcolor="#e9effd", fg="white", 
-                        activebackground="#5399d2")
+    volumen_slider.config(bg="#a88fe2", troughcolor="#feebfe", fg="white", 
+                        activebackground="#cfaaf5")
 
 # ____________ . ✰ * Frames * ✰ . ____________
-songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ Canción ✰ * . +")
+songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ Para la mejor mama... ✰ * . +")
 songinfo_f.place(x=10, y=10, width=385, height=400)
 
-songselect_f = ttk.LabelFrame(root, text="+ . * ✰ Catálogo ✰ * . +")
+songselect_f = ttk.LabelFrame(root, text="+ . * ✰ Te amo!! ✰ * . +")
 songselect_f.place(x=405, y=10, width=385, height=400)
 
-options_f = ttk.LabelFrame(root, text="+ . * ✰ Opciones ✰ * . +")
+options_f = ttk.LabelFrame(root, text="+ . * ✰ Sos la mujer más linda del mundo ✰ * . +")
 options_f.place(x=10, y=420, width=780, height=90)
 
 for i in range(5):
     options_f.columnconfigure(i, weight=1)
 
-playlists_f = ttk.LabelFrame(root, text="+ . * ✰ Playlists ✰ * . +")
+playlists_f = ttk.LabelFrame(root, text="+ . * ✰ De tu hija para vos <3 ✰ * . +")
 playlists_f.place(x=800, y=10, width=290, height=350)
 
-pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ Opciones ✰ * . +")
+pl_options_f = ttk.LabelFrame(root, text="+ . * ✰ Viva Perón!! ✰ * . +")
 pl_options_f.place(x=800, y=370, width=290, height=140)
 
 for i in range(2):
     pl_options_f.columnconfigure(i, weight=1)
 
-vol_frame = ttk.LabelFrame(root, text="✰ Volumen ✰")
+vol_frame = ttk.LabelFrame(root, text="✰ 🔊🔉🔈 ✰")
 vol_frame.place(x=1100, y=10, width=90, height=500)
 
 # ____________ . ✰ * Adentro de los Frames * ✰ . ____________
