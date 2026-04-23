@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox, simpledialog
 import pygame as pg
 from mutagen.mp3 import MP3
 import json, random, os
@@ -31,6 +31,7 @@ pg.mixer.init(frequency=16000)
 pg.mixer.music.set_volume(0.5)
 SONG_END = pg.USEREVENT + 1
 pg.mixer.music.set_endevent(SONG_END)
+playlist_reproduccion = None #ACA
 
 # ____________ . ✰ * Funciones * ✰ . ____________
 def segundos_a_minutos(segundos):
@@ -41,7 +42,7 @@ def segundos_a_minutos(segundos):
     return f"{minutos}:{segundos}"
 
 def play(filename=None):
-    global duration_song, current_song, paused, bar_moment, SONG_END, offset, last_song
+    global duration_song, current_song, paused, bar_moment, SONG_END, offset, last_song, playlist_reproduccion
     if filename is None:
         if tree_playlist.selection():
             filename = filename_playlist
@@ -61,6 +62,8 @@ def play(filename=None):
             if bar_moment: 
                 root.after_cancel(bar_moment)
     else:
+        if not en_lista_playlist and playlist_actual:
+            playlist_reproduccion = playlist_actual
         last_song = current_song  
         pg.mixer.music.load(filename)
         pg.mixer.music.play()
@@ -141,8 +144,12 @@ def añadir_a_playlist(event=None):
         if filename_catalogo == s["direc"]:
 
             if s["direc"] in playlists[playlist_actual]:
-                messagebox.showinfo("Info", "La canción ya está en la playlist.") #cambiar esto para q sea como antes q te deja elegir
-                return
+                respuesta = messagebox.askyesno(
+                    "Duplicada",
+                    "La canción ya está en la playlist.\n¿Querés agregarla igual?"
+                )
+                if not respuesta:
+                    return
 
             playlists[playlist_actual].append(s["direc"])
 
@@ -203,9 +210,8 @@ def checkiar_musica_termino():
 
 def siguiente_cancion():
     global current_song, filename_playlist, playlist_shuffle
-    if aleatorio:
-        global playlist_shuffle
 
+    if aleatorio:
         if not playlist_shuffle:
             shuffle()
 
@@ -214,99 +220,83 @@ def siguiente_cancion():
         play(cancion["direc"])
         filename_playlist = cancion["direc"]
         current_song = cancion["direc"]
-        
-        if not tree_playlist.get_children():
-            return
 
+        if playlist_actual == playlist_reproduccion:
+            for item in tree_playlist.get_children():
+                valores = tree_playlist.item(item)["values"]
+                if (cancion["Nombre"], cancion["Album"], cancion["Artista"], cancion["Duracion"]) == tuple(valores):
+                    tree_playlist.selection_set(item)
+                    tree_playlist.focus(item)
+                    tree_playlist.see(item)
+                    break
+        return
+
+    lista = obtener_playlist_reproduccion()
+    if not lista:
+        return
+
+    for i, s in enumerate(lista):
+        if s["direc"] == current_song:
+            index = i
+            break
+    else:
+        index = -1
+
+    siguiente_index = (index + 1) % len(lista)
+    siguiente = lista[siguiente_index]
+
+    play(siguiente["direc"])
+    current_song = siguiente["direc"]
+    filename_playlist = siguiente["direc"]
+    if playlist_actual == playlist_reproduccion:
         for item in tree_playlist.get_children():
             valores = tree_playlist.item(item)["values"]
-            for s in canciones:
-                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                    if s["direc"] == cancion["direc"]:
-                        tree_playlist.selection_set(item)
-                        tree_playlist.focus(item)
-                        tree_playlist.see(item)
-                        break
-        return
-    
-    selec = tree_playlist.selection()
-    items = tree_playlist.get_children()
-    if not items:
-        return
-    if selec:
-        index = items.index(selec[0])
-        siguiente_index = index + 1
-    else:
-        siguiente_index = 0
-
-    if siguiente_index < len(items):
-        next_item = items[siguiente_index]
-        tree_playlist.selection_set(next_item)
-        tree_playlist.focus(next_item)
-        valores = tree_playlist.item(next_item)["values"]
-
-        for s in canciones:
-            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                play(s["direc"])
-                
-                filename_playlist = s["direc"]
-                current_song = s["direc"]
-                break
-    else:
-        tree_playlist.selection_set(items[0])
-        tree_playlist.focus(items[0])
-        valores = tree_playlist.item(items[0])["values"]
-        for s in canciones:
-            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                play(s["direc"])
-                filename_playlist = s["direc"]
-                current_song = s["direc"]
+            if (siguiente["Nombre"], siguiente["Album"], siguiente["Artista"], siguiente["Duracion"]) == tuple(valores):
+                tree_playlist.selection_set(item)
+                tree_playlist.focus(item)
+                tree_playlist.see(item)
                 break
 
 def anterior_cancion():
     global current_song, filename_playlist, tiempito_musica, offset
 
-    if aleatorio and last_song:
-        anterior = last_song
-        play(anterior)
+    lista = obtener_playlist_reproduccion()
+    if not lista:
+        return
+
+    for i, s in enumerate(lista):
+        if s["direc"] == current_song:
+            index = i
+            break
+    else:
+        index = -1
+
+    if tiempito_musica > 3:
+        offset = 0
+        #pg.mixer.music.stop()
+        pg.mixer.music.play()
+        progress_song["value"] = 0
+        if bar_moment:
+            root.after_cancel(bar_moment)
+        increase_progress_bar()
+        return
+
+
+    anterior_index = (index - 1) % len(lista)
+    anterior = lista[anterior_index]
+
+    play(anterior["direc"])
+    current_song = anterior["direc"]
+    filename_playlist = anterior["direc"]
+
+    if playlist_actual == playlist_reproduccion:
         for item in tree_playlist.get_children():
             valores = tree_playlist.item(item)["values"]
-            for s in canciones:
-                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                    if s["direc"] == anterior:
-                        tree_playlist.selection_set(item)
-                        tree_playlist.focus(item)
-                        tree_playlist.see(item)
-                        break
-        return
-    
-    selec = tree_playlist.selection()
-    items = tree_playlist.get_children()
-    if not items:
-        return
-    if selec:
-        index = items.index(selec[0])
-        anterior_index = index - 1
-    else:
-        anterior_index = 0
-
-    if tiempito_musica < 3:
-        if anterior_index < len(items) and anterior_index >= 0:
-            item_anterior = items[anterior_index]
-            tree_playlist.selection_set(item_anterior)
-            tree_playlist.focus(item_anterior)
-            valores = tree_playlist.item(item_anterior)["values"]
-
-            for s in canciones:
-                if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                    play(s["direc"])
-                    
-                    filename_playlist = s["direc"]
-                    current_song = s["direc"]
-                    break
-    else:
-        offset = 0
-        pg.mixer.music.play()
+            if (anterior["Nombre"], anterior["Album"], anterior["Artista"], anterior["Duracion"]) == tuple(valores):
+                tree_playlist.selection_set(item)
+                tree_playlist.focus(item)
+                tree_playlist.see(item)
+                break
 
 def cambiar_loop():
     global loop
@@ -329,16 +319,13 @@ def randum_orden():
 
 def shuffle():
     global playlist_shuffle
-    playlist_shuffle = []
 
-    for item in tree_playlist.get_children():
-        valores = tree_playlist.item(item)["values"]
+    lista = obtener_playlist_reproduccion()
+    if not lista:
+        playlist_shuffle = []
+        return
 
-        for s in canciones:
-            if (s["Nombre"], s["Album"], s["Artista"], s["Duracion"]) == tuple(valores):
-                playlist_shuffle.append(s)
-                break
-
+    playlist_shuffle = lista.copy()
     random.shuffle(playlist_shuffle)
 
 def show_img_album():
@@ -503,14 +490,18 @@ def mostrar_lista_playlists():
         tree_playlist.insert("", "end", values=(nombre_pl, "", "", ""))
 
 def crear_playlist():
-    nombre = "Playlist " + str(len(playlists) + 1)
-    playlists[nombre] = []
     global playlist_actual
+    nombre = simpledialog.askstring("Crear Playlist", "Nombre de la playlist:")
+    if not nombre:
+        return
+    if nombre in playlists:
+        messagebox.showwarning("Error", "Ya existe una playlist con ese nombre.")
+        return
+    playlists[nombre] = []
     playlist_actual = nombre
     tree_playlist.delete(*tree_playlist.get_children())
     for nombre_pl in playlists:
         tree_playlist.insert("", "end", values=(nombre_pl, "", "", ""))
-    
     guardar_playlists()
 
 def entrar_playlist(event):
@@ -537,16 +528,36 @@ def manejar_doble_click(event):
     else:
         play()
 
-def obtener_playlist_actual():
-    if playlist_actual and playlist_actual in playlists:
+def obtener_playlist_reproduccion():
+    if playlist_reproduccion and playlist_reproduccion in playlists:
         lista = []
-        for ruta in playlists[playlist_actual]:
+        for ruta in playlists[playlist_reproduccion]:
             for s in canciones:
                 if s["direc"] == ruta:
                     lista.append(s)
                     break
         return lista
     return []
+
+def eliminar_playlist():
+    global playlist_actual
+    selec = tree_playlist.selection()
+    if not selec:
+        return
+    nombre = tree_playlist.item(selec[0])["values"][0]
+    if nombre not in playlists:
+        return
+    confirmar = messagebox.askyesno(
+        "Eliminar playlist",
+        f"¿Seguro que querés eliminar '{nombre}'?"
+    )
+    if not confirmar:
+        return
+    del playlists[nombre]
+    if playlist_actual == nombre:
+        playlist_actual = None
+    guardar_playlists()
+    mostrar_lista_playlists()
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
@@ -713,18 +724,19 @@ volumen_slider = tk.Scale(
     to=0,
     orient="vertical",
     command=cambiar_volumen,
-    length=420, #450
+    length=390, #450
     width=30,
     showvalue=0,
     highlightthickness=0,
     bd=0    
 )
 volumen_slider.set(50)
-volumen_slider.grid(row=0, column=0, padx=30, pady=5)
+volumen_slider.grid(row=1, column=0, padx=30, pady=5)
 
-num_vol = ttk.Label(vol_frame, text="50")
-num_vol.grid(row=1, column=0, padx=30, pady=5)
+num_vol = ttk.Label(vol_frame, text="50", font=("Trebuchet MS", 12, "bold"))
+num_vol.grid(row=2, column=0, padx=30, pady=5)
 
+cambiar_estilo_b = ttk.Button(vol_frame, text=". +Estilo+ .", width=10, command=cambiar_estilo).grid(row=0, column=0, pady=3)
 
 search_var = tk.StringVar()
 search_entry = ttk.Entry(songselect_f, textvariable=search_var, style="Search.TEntry")
@@ -762,13 +774,13 @@ tree_playlist.pack(fill="both", expand=True, padx=10, pady=10)
 
 agregar_a_pl = ttk.Button(pl_options_f, text="Añadir a la Playlist", command=añadir_a_playlist).grid(row=0, column=0, pady=3)
 eliminar_pl = ttk.Button(pl_options_f, text="Eliminar de la Playlist", command=eliminar_de_playlist).grid(row=0, column=1, pady=3)
-cambiar_estilo_b = ttk.Button(pl_options_f, text="Cambiar Estilo", command=cambiar_estilo).grid(row=1, column=0, pady=3)
 abrir_archivo_b = ttk.Button(pl_options_f, text="Abrir archivo...", command=abrir_archivos)
 abrir_archivo_b.grid(row=1, column=1, pady=3)
 crear_playlist_b = ttk.Button(pl_options_f, text="Crear Playlist", command=crear_playlist)
 crear_playlist_b.grid(row=2, column=0, pady=3)
 volver_lista_b = ttk.Button(pl_options_f, text="Volver", command=mostrar_lista_playlists)
 volver_lista_b.grid(row=2, column=1, pady=3)
+ttk.Button(pl_options_f, text="Eliminar Playlist", command=eliminar_playlist).grid(row=1, column=0, pady=3)
 
 tree_playlist.bind("<Double-Button-1>", manejar_doble_click)
 
