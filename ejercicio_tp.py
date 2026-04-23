@@ -1,9 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-
-import os                               #borrar dps
-os.environ["SDL_AUDIODRIVER"] = "dummy" #borrar dps
-
 import pygame as pg
 from mutagen.mp3 import MP3
 import json, random, os
@@ -219,6 +215,9 @@ def siguiente_cancion():
         filename_playlist = cancion["direc"]
         current_song = cancion["direc"]
         
+        if not tree_playlist.get_children():
+            return
+
         for item in tree_playlist.get_children():
             valores = tree_playlist.item(item)["values"]
             for s in canciones:
@@ -537,6 +536,17 @@ def manejar_doble_click(event):
         entrar_playlist(event)
     else:
         play()
+
+def obtener_playlist_actual():
+    if playlist_actual and playlist_actual in playlists:
+        lista = []
+        for ruta in playlists[playlist_actual]:
+            for s in canciones:
+                if s["direc"] == ruta:
+                    lista.append(s)
+                    break
+        return lista
+    return []
 
 # ____________ . ✰ * Root * ✰ . ____________
 pg.init()
