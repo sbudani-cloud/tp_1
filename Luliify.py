@@ -677,7 +677,7 @@ def tema_azul():
                         activebackground="#5399d2")
 
 # ____________ . ✰ * Frames * ✰ . ____________
-songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ Canción ✰ * . +")##
+songinfo_f = ttk.LabelFrame(root, text="+ . * ✰ Canción ✰ * . +")
 songinfo_f.place(x=10, y=10, width=385, height=400)
 
 songselect_f = ttk.LabelFrame(root, text="+ . * ✰ Catálogo ✰ * . +")
