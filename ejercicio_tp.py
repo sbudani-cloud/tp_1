@@ -564,6 +564,10 @@ pg.init()
 
 root = tk.Tk()
 root.title("✩ + . * Luliify * . + ✩")
+
+icono = tk.PhotoImage(file="icon.png")
+root.iconphoto(True, icono)
+
 root.geometry("1200x520")
 root.resizable(False, False)
 
