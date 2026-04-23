@@ -46,12 +46,11 @@ Lista de cosas para hacer:
 Hice lo de que cambie el boton de loop y aleatorio con el estilo, y mejoré el botón de anterior en modo aleatorio. También hice que se puedan reordenar las canciones en la playlist.
 Agregué un slider para poder cambiar el volumen y una foto para cuando el album es desconocido.
 
-Falta:
--Capáz ver si puedo hacer mi propio toplevel en vez de un messagebox, para poder decorarlo y ponerle los colores.
+No creo llegar, pero capaz después como proyecto personal quiero hacer:
+-Mi propio toplevel en vez de un messagebox, para poder decorarlo y ponerle los colores.
 -Crear más estilos.
 
 ***
 22/04
 Hice que se pueda ordenar por duración, que los frames digan arriba que son, y que haya un número indicando en que volumen está.
-Cosas para hacer (de nachito):
--Crear más de una playlist.
+Se pueden crear varias playlists, y cambié algunas cosas de la interfaz.
