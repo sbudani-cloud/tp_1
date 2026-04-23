@@ -1,10 +1,8 @@
-[
-    "canciones/Fast As You Can.mp3",
-    "canciones/I Know.mp3",
-    "canciones/Eleanor Rigby.mp3",
-    "canciones/Baby Doll.mp3",
-    "canciones/A rodar mi vida.mp3",
-    "canciones/New Perspective.mp3",
-    "canciones/Un Angel para tu Soledad.mp3",
-    "canciones/Ella Uso Mi Cabeza Como Un Revolver.mp3"
-]
+{
+    "Lulii": [
+        "canciones/I Know.mp3",
+        "canciones/Fast As You Can.mp3",
+        "canciones/New Perspective.mp3",
+        "canciones/Ella Uso Mi Cabeza Como Un Revolver.mp3"
+    ]
+}
