@@ -89,5 +89,68 @@
         "Artista": "Desconocido",
         "Duracion": "7:00",
         "direc": "C:/Users/Luli/Desktop/Canciones/Frank Ocean - American Wedding (Traducci\u00f3n al Espa\u00f1ol).mp3"
+    },
+    {
+        "Nombre": "piano japonjes",
+        "Album": "Desconocido",
+        "Artista": "Desconocido",
+        "Duracion": "0:33",
+        "direc": "C:/Users/Luli/Desktop/Canciones/piano japonjes.mp3"
+    },
+    {
+        "Nombre": "the-disappearance-of-hatsune-miku-english-cover-rachie-chu-yin-mikunoxiao-shi",
+        "Album": "Desconocido",
+        "Artista": "Desconocido",
+        "Duracion": "5:09",
+        "direc": "C:/Users/Luli/Desktop/Canciones/the-disappearance-of-hatsune-miku-english-cover-rachie-chu-yin-mikunoxiao-shi.mp3"
+    },
+    {
+        "Nombre": "Graduados",
+        "Album": "Desconocido",
+        "Artista": "Desconocido",
+        "Duracion": "2:42",
+        "direc": "C:/Users/Luli/Desktop/Canciones/Graduados.mp3"
+    },
+    {
+        "Nombre": "Only-Us-_BSD-Soukoku-animatic_",
+        "Album": "Desconocido",
+        "Artista": "Desconocido",
+        "Duracion": "2:09",
+        "direc": "C:/Users/Luli/Desktop/Canciones/Only-Us-_BSD-Soukoku-animatic_.mp3"
+    },
+    {
+        "Nombre": "Criminal",
+        "Album": "Desconocido",
+        "Artista": "Fiona Apple",
+        "Duracion": "4:23",
+        "direc": "C:/Users/Luli/Desktop/Repaso Python/tp_1/canciones/Fiona Apple - Criminal (Official HD Video).mp3"
+    },
+    {
+        "Nombre": "Not About Love",
+        "Album": "Desconocido",
+        "Artista": "Fiona Apple",
+        "Duracion": "4:18",
+        "direc": "C:/Users/Luli/Desktop/Repaso Python/tp_1/canciones/Fiona Apple - Not About Love (Official HD Video).mp3"
+    },
+    {
+        "Nombre": "Paper Bag",
+        "Album": "When the Pawn",
+        "Artista": "Fiona Apple",
+        "Duracion": "3:39",
+        "direc": "C:/Users/Luli/Desktop/Repaso Python/tp_1/canciones/Fiona Apple - Paper Bag (Official HD Video).mp3"
+    },
+    {
+        "Nombre": "Get Gone",
+        "Album": "When the Pawn",
+        "Artista": "Fiona Apple",
+        "Duracion": "4:07",
+        "direc": "C:/Users/Luli/Desktop/Repaso Python/tp_1/canciones/Get Gone.mp3"
+    },
+    {
+        "Nombre": "Our Word",
+        "Album": "Desconocido",
+        "Artista": "Desconocido",
+        "Duracion": "5:17",
+        "direc": "C:/Users/Luli/Desktop/Repaso Python/tp_1/canciones/Our Word.mp3"
     }
 ]
